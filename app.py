@@ -162,7 +162,7 @@ def vendre(id):
         cur.execute("UPDATE articles SET stock = stock - %s WHERE id = %s", (quantite, id))
         cur.execute("INSERT INTO ventes (article_id, quantite) VALUES (%s, %s)", (id, quantite))
         conn.commit()
-        flash('Vente enregistrée avec succès !', 'success')
+        flash('success', 'vente_ok')
     else:
         flash('Stock insuffisant !', 'danger')
 
