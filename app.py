@@ -4,10 +4,10 @@ import qrcode
 import os
 
 db_config = {
-    'host': os.environ.get('MYSQLHOST'),
-    'user': os.environ.get('MYSQLUSER'),
-    'password': os.environ.get('MYSQLPASSWORD'),
-    'database': os.environ.get('MYSQLDATABASE'),
+    'host': os.environ.get('MYSQL_HOST'),
+    'user': os.environ.get('MYSQL_USER'),
+    'password': os.environ.get('MYSQL_PASSWORD'),
+    'database': os.environ.get('MYSQL_DATABASE'),
     'port': int(os.environ.get('MYSQLPORT', 3306))
 }
 from werkzeug.utils import secure_filename
