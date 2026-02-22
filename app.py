@@ -2,6 +2,14 @@ from flask import Flask, render_template, request, redirect, url_for, flash
 import mysql.connector
 import qrcode
 import os
+
+db_config = {
+    'host': os.environ.get('MYSQLHOST'),
+    'user': os.environ.get('MYSQLUSER'),
+    'password': os.environ.get('MYSQLPASSWORD'),
+    'database': os.environ.get('MYSQLDATABASE'),
+    'port': int(os.environ.get('MYSQLPORT', 3306))
+}
 from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
@@ -62,7 +70,8 @@ def ajouter():
         conn.commit()
         article_id = cur.lastrowid
 
-        url_article = f"http://192.168.1.79:5000/article/{article_id}"
+        base_url = os.environ.get('BASE_URL', 'http://localhost:5000')
+        url_article = f"{base_url}/article/{article_id}"
         qr = qrcode.make(url_article)
         qr_filename = f"qr_{article_id}.png"
         qr.save(os.path.join('static/qrcodes', qr_filename))
