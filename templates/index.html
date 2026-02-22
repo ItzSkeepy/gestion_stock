@@ -18,7 +18,7 @@
         <tr>
             <td>
                 {% if article[5] %}
-                    <img src="/static/uploads/{{ article[5] }}" width="60" height="60" style="object-fit:cover;">
+                    <img src="{{ article[5] }}" width="60" height="60" style="object-fit:cover;">
                 {% else %}
                     <span class="text-muted">Aucune photo</span>
                 {% endif %}
