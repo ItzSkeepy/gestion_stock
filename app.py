@@ -130,6 +130,7 @@ def modifier(id):
 def supprimer(id):
     conn = get_db()
     cur = conn.cursor()
+    cur.execute("DELETE FROM ventes WHERE article_id = %s", (id,))
     cur.execute("DELETE FROM articles WHERE id = %s", (id,))
     conn.commit()
     cur.close()
