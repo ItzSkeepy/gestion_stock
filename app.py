@@ -92,13 +92,17 @@ def ajouter():
         conn.commit()
         article_id = cur.lastrowid
 
+        import io
         base_url = os.environ.get('BASE_URL', 'http://localhost:5000')
         url_article = f"{base_url}/article/{article_id}"
         qr = qrcode.make(url_article)
-        qr_filename = f"qr_{article_id}.png"
-        qr.save(os.path.join('static/qrcodes', qr_filename))
+        buffer = io.BytesIO()
+        qr.save(buffer, format='PNG')
+        buffer.seek(0)
+        qr_upload = cloudinary.uploader.upload(buffer, resource_type='image', public_id=f"qr_{article_id}")
+        qr_url = qr_upload['secure_url']
 
-        cur.execute("UPDATE articles SET qr_code = %s WHERE id = %s", (qr_filename, article_id))
+        cur.execute("UPDATE articles SET qr_code = %s WHERE id = %s", (qr_url, article_id))
         conn.commit()
         cur.close()
         conn.close()

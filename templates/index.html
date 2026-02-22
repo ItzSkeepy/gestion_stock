@@ -34,9 +34,9 @@
             </td>
             <td>
                 {% if article[6] %}
-                    <img src="{{ article[5] }}" width="60" height="60" style="object-fit:cover;">
+                    <img src="{{ article[6] }}" width="60">
                     <br>
-                    <a href="/static/qrcodes/{{ article[6] }}" download class="btn btn-sm btn-outline-primary mt-1">Télécharger</a>
+                    <a href="{{ article[6] }}" download class="btn btn-sm btn-outline-primary mt-1">Télécharger</a>
                 {% endif %}
             </td>
             <td>
