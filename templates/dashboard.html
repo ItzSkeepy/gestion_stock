@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2 class="mb-4">📊 Tableau de bord</h2>
+
+<!-- Cartes statistiques -->
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card text-white bg-primary shadow">
+            <div class="card-body text-center">
+                <h3>{{ total_articles }}</h3>
+                <p class="mb-0">📦 Articles</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-success shadow">
+            <div class="card-body text-center">
+                <h3>{{ total_ventes }}</h3>
+                <p class="mb-0">🛒 Ventes effectuées</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-warning shadow">
+            <div class="card-body text-center">
+                <h3>{{ total_quantite }}</h3>
+                <p class="mb-0">📤 Articles vendus</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-dark shadow">
+            <div class="card-body text-center">
+                <h3>{{ "%.0f"|format(chiffre_affaires) }} FCFA</h3>
+                <p class="mb-0">💰 Chiffre d'affaires</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Alertes stock bas -->
+{% if stock_bas %}
+<div class="alert alert-danger">
+    <h5>⚠️ Articles avec stock bas :</h5>
+    {% for article in stock_bas %}
+        <span class="badge bg-danger me-2">{{ article[1] }} — {{ article[4] }} restant(s)</span>
+    {% endfor %}
+</div>
+{% endif %}
+
+<!-- Top articles -->
+{% if top_articles %}
+<div class="card shadow mb-4">
+    <div class="card-header bg-success text-white">🏆 Articles les plus vendus</div>
+    <div class="card-body">
+        <table class="table table-sm">
+            <thead><tr><th>Article</th><th>Quantité vendue</th></tr></thead>
+            <tbody>
+                {% for article in top_articles %}
+                <tr>
+                    <td>{{ article[0] }}</td>
+                    <td><span class="badge bg-success">{{ article[1] }}</span></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endif %}
+
+<!-- Historique des ventes -->
+<div class="card shadow">
+    <div class="card-header bg-dark text-white">🕒 Historique des ventes</div>
+    <div class="card-body">
+        {% if historique %}
+        <table class="table table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>#</th>
+                    <th>Article</th>
+                    <th>Quantité</th>
+                    <th>Prix unitaire</th>
+                    <th>Total</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for vente in historique %}
+                <tr>
+                    <td>{{ vente[0] }}</td>
+                    <td>{{ vente[1] }}</td>
+                    <td>{{ vente[2] }}</td>
+                    <td>{{ vente[3] }} FCFA</td>
+                    <td><strong>{{ "%.0f"|format(vente[4]) }} FCFA</strong></td>
+                    <td>{{ vente[5].strftime('%d/%m/%Y %H:%M') }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p class="text-muted text-center">Aucune vente enregistrée pour le moment.</p>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}

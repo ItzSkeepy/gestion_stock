@@ -2,6 +2,14 @@ from flask import Flask, render_template, request, redirect, url_for, flash
 import mysql.connector
 import qrcode
 import os
+import cloudinary
+import cloudinary.uploader
+
+cloudinary.config(
+    cloud_name = os.environ.get('CLOUDINARY_CLOUD_NAME'),
+    api_key = os.environ.get('CLOUDINARY_API_KEY'),
+    api_secret = os.environ.get('CLOUDINARY_API_SECRET')
+)
 
 db_config = {
     'host': os.environ.get('MYSQL_HOST'),
@@ -72,8 +80,8 @@ def ajouter():
         if 'photo' in request.files:
             photo = request.files['photo']
             if photo and allowed_file(photo.filename):
-                photo_filename = secure_filename(photo.filename)
-                photo.save(os.path.join(app.config['UPLOAD_FOLDER'], photo_filename))
+                upload_result = cloudinary.uploader.upload(photo)
+                photo_filename = upload_result['secure_url']
 
         conn = get_db()
         cur = conn.cursor()
@@ -148,6 +156,67 @@ def article_public(id):
     cur.close()
     conn.close()
     return render_template('article_public.html', article=article)
+
+# AJOUTER TABLEAU DE BORD
+@app.route('/dashboard')
+def dashboard():
+    conn = get_db()
+    cur = conn.cursor()
+
+    # Total des articles
+    cur.execute("SELECT COUNT(*) FROM articles")
+    total_articles = cur.fetchone()[0]
+
+    # Total des ventes
+    cur.execute("SELECT COUNT(*), SUM(quantite) FROM ventes")
+    ventes_stats = cur.fetchone()
+    total_ventes = ventes_stats[0]
+    total_quantite = ventes_stats[1] or 0
+
+    # Chiffre d'affaires total
+    cur.execute("""
+        SELECT SUM(a.prix * v.quantite) 
+        FROM ventes v 
+        JOIN articles a ON v.article_id = a.id
+    """)
+    chiffre_affaires = cur.fetchone()[0] or 0
+
+    # Articles avec stock bas (<=5)
+    cur.execute("SELECT * FROM articles WHERE stock <= 5")
+    stock_bas = cur.fetchall()
+
+    # Historique des ventes
+    cur.execute("""
+        SELECT v.id, a.nom, v.quantite, a.prix, (v.quantite * a.prix) as total, v.date_vente
+        FROM ventes v
+        JOIN articles a ON v.article_id = a.id
+        ORDER BY v.date_vente DESC
+    """)
+    historique = cur.fetchall()
+
+    # Articles les plus vendus
+    cur.execute("""
+        SELECT a.nom, SUM(v.quantite) as total_vendu
+        FROM ventes v
+        JOIN articles a ON v.article_id = a.id
+        GROUP BY a.id, a.nom
+        ORDER BY total_vendu DESC
+        LIMIT 5
+    """)
+    top_articles = cur.fetchall()
+
+    cur.close()
+    conn.close()
+
+    return render_template('dashboard.html',
+        total_articles=total_articles,
+        total_ventes=total_ventes,
+        total_quantite=total_quantite,
+        chiffre_affaires=chiffre_affaires,
+        stock_bas=stock_bas,
+        historique=historique,
+        top_articles=top_articles
+    )
 
 # ENREGISTRER UNE VENTE
 @app.route('/vendre/<int:id>', methods=['POST'])
