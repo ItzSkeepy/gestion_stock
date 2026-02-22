@@ -24,7 +24,21 @@ db_config = {
 }
 
 def get_db():
-    return mysql.connector.connect(**db_config)
+    host = os.environ.get('MYSQL_HOST')
+    user = os.environ.get('MYSQL_USER')
+    password = os.environ.get('MYSQL_PASSWORD')
+    database = os.environ.get('MYSQL_DATABASE')
+    port = int(os.environ.get('MYSQL_PORT', 3306))
+    
+    print(f"Connexion à : {host}:{port} user={user} db={database}")
+    
+    return mysql.connector.connect(
+        host=host,
+        user=user,
+        password=password,
+        database=database,
+        port=port
+    )
 
 # Configuration uploads
 UPLOAD_FOLDER = 'static/uploads'
