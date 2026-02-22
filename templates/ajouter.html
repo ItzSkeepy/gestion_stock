@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2 class="mb-4">➕ Ajouter un article</h2>
+
+<form method="POST" enctype="multipart/form-data" class="col-md-6">
+    <div class="mb-3">
+        <label class="form-label">Nom de l'article</label>
+        <input type="text" name="nom" class="form-control" required>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Description</label>
+        <textarea name="description" class="form-control" rows="3"></textarea>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Prix (FCFA)</label>
+        <input type="number" name="prix" step="0.01" class="form-control" required>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Stock initial</label>
+        <input type="number" name="stock" class="form-control" required>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Photo</label>
+        <input type="file" name="photo" class="form-control" accept="image/*">
+    </div>
+    <button type="submit" class="btn btn-success">Ajouter et générer QR Code</button>
+    <a href="/" class="btn btn-secondary">Annuler</a>
+</form>
+{% endblock %}

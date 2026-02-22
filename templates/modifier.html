@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2 class="mb-4">✏️ Modifier un article</h2>
+
+<form method="POST" class="col-md-6">
+    <div class="mb-3">
+        <label class="form-label">Nom de l'article</label>
+        <input type="text" name="nom" class="form-control" value="{{ article[1] }}" required>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Description</label>
+        <textarea name="description" class="form-control" rows="3">{{ article[2] }}</textarea>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Prix (FCFA)</label>
+        <input type="number" name="prix" step="0.01" class="form-control" value="{{ article[3] }}" required>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Stock</label>
+        <input type="number" name="stock" class="form-control" value="{{ article[4] }}" required>
+    </div>
+    <button type="submit" class="btn btn-warning">Enregistrer les modifications</button>
+    <a href="/" class="btn btn-secondary">Annuler</a>
+</form>
+{% endblock %}

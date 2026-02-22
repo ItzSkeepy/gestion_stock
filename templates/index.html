@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2 class="mb-4">📋 Liste des articles</h2>
+
+<table class="table table-bordered table-hover">
+    <thead class="table-dark">
+        <tr>
+            <th>Photo</th>
+            <th>Nom</th>
+            <th>Prix</th>
+            <th>Stock</th>
+            <th>QR Code</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for article in articles %}
+        <tr>
+            <td>
+                {% if article[5] %}
+                    <img src="/static/uploads/{{ article[5] }}" width="60" height="60" style="object-fit:cover;">
+                {% else %}
+                    <span class="text-muted">Aucune photo</span>
+                {% endif %}
+            </td>
+            <td>{{ article[1] }}</td>
+            <td>{{ article[3] }} FCFA</td>
+            <td>
+                {% if article[4] <= 5 %}
+                    <span class="badge bg-danger">{{ article[4] }} ⚠️</span>
+                {% else %}
+                    <span class="badge bg-success">{{ article[4] }}</span>
+                {% endif %}
+            </td>
+            <td>
+                {% if article[6] %}
+                    <img src="/static/qrcodes/{{ article[6] }}" width="60">
+                    <br>
+                    <a href="/static/qrcodes/{{ article[6] }}" download class="btn btn-sm btn-outline-primary mt-1">Télécharger</a>
+                {% endif %}
+            </td>
+            <td>
+                <a href="/modifier/{{ article[0] }}" class="btn btn-sm btn-warning">✏️ Modifier</a>
+                <a href="/supprimer/{{ article[0] }}" class="btn btn-sm btn-danger" onclick="return confirm('Supprimer cet article ?')">🗑️ Supprimer</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
