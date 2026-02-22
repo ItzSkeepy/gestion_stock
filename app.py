@@ -8,7 +8,7 @@ db_config = {
     'user': os.environ.get('MYSQL_USER'),
     'password': os.environ.get('MYSQL_PASSWORD'),
     'database': os.environ.get('MYSQL_DATABASE'),
-    'port': int(os.environ.get('MYSQLPORT', 3306))
+    'port': int(os.environ.get('MYSQL_PORT', 3306))
 }
 from werkzeug.utils import secure_filename
 
