@@ -56,6 +56,49 @@ def get_db():
         port=port
     )
 
+# LISTE DES CATEGORIES
+@app.route('/categories')
+@login_required
+def categories():
+    conn = get_db()
+    cur = conn.cursor()
+    cur.execute("SELECT c.*, COUNT(a.id) as nb_articles FROM categories c LEFT JOIN articles a ON a.categorie_id = c.id GROUP BY c.id")
+    categories = cur.fetchall()
+    cur.close()
+    conn.close()
+    return render_template('categories.html', categories=categories)
+
+# AJOUTER UNE CATEGORIE
+@app.route('/categories/ajouter', methods=['GET', 'POST'])
+@login_required
+def ajouter_categorie():
+    if request.method == 'POST':
+        nom = request.form['nom']
+        description = request.form['description']
+        conn = get_db()
+        cur = conn.cursor()
+        cur.execute("INSERT INTO categories (nom, description) VALUES (%s, %s)", (nom, description))
+        conn.commit()
+        cur.close()
+        conn.close()
+        flash('Catégorie ajoutée !', 'success')
+        return redirect(url_for('categories'))
+    return render_template('ajouter_categorie.html')
+
+# SUPPRIMER UNE CATEGORIE
+@app.route('/categories/supprimer/<int:id>')
+@login_required
+def supprimer_categorie(id):
+    conn = get_db()
+    cur = conn.cursor()
+    cur.execute("UPDATE articles SET categorie_id = NULL WHERE categorie_id = %s", (id,))
+    cur.execute("DELETE FROM categories WHERE id = %s", (id,))
+    conn.commit()
+    cur.close()
+    conn.close()
+    flash('Catégorie supprimée !', 'danger')
+    return redirect(url_for('categories'))
+
 # LOGIN
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -81,21 +124,30 @@ def logout():
 def index():
     conn = get_db()
     cur = conn.cursor()
-    cur.execute("SELECT * FROM articles")
+    cur.execute("""
+        SELECT a.*, c.nom as categorie_nom 
+        FROM articles a 
+        LEFT JOIN categories c ON a.categorie_id = c.id
+    """)
     articles = cur.fetchall()
+    cur.execute("SELECT * FROM categories")
+    categories = cur.fetchall()
     cur.close()
     conn.close()
-    return render_template('index.html', articles=articles)
+    return render_template('index.html', articles=articles, categories=categories)
 
 # AJOUTER UN ARTICLE
 @app.route('/ajouter', methods=['GET', 'POST'])
 @login_required
 def ajouter():
+    conn = get_db()
+    cur = conn.cursor()
     if request.method == 'POST':
         nom = request.form['nom']
         description = request.form['description']
         prix = request.form['prix']
         stock = request.form['stock']
+        categorie_id = request.form.get('categorie_id') or None
 
         photo_filename = None
         if 'photo' in request.files:
@@ -104,12 +156,10 @@ def ajouter():
                 upload_result = cloudinary.uploader.upload(photo)
                 photo_filename = upload_result['secure_url']
 
-        conn = get_db()
-        cur = conn.cursor()
         cur.execute("""
-            INSERT INTO articles (nom, description, prix, stock, photo)
-            VALUES (%s, %s, %s, %s, %s)
-        """, (nom, description, prix, stock, photo_filename))
+            INSERT INTO articles (nom, description, prix, stock, photo, categorie_id)
+            VALUES (%s, %s, %s, %s, %s, %s)
+        """, (nom, description, prix, stock, photo_filename, categorie_id))
         conn.commit()
         article_id = cur.lastrowid
 
@@ -130,7 +180,11 @@ def ajouter():
         flash('Article ajouté avec succès !', 'success')
         return redirect(url_for('index'))
 
-    return render_template('ajouter.html')
+    cur.execute("SELECT * FROM categories")
+    categories = cur.fetchall()
+    cur.close()
+    conn.close()
+    return render_template('ajouter.html', categories=categories)
 
 # MODIFIER UN ARTICLE
 @app.route('/modifier/<int:id>', methods=['GET', 'POST'])
@@ -143,9 +197,10 @@ def modifier(id):
         description = request.form['description']
         prix = request.form['prix']
         stock = request.form['stock']
+        categorie_id = request.form.get('categorie_id') or None
         cur.execute("""
-            UPDATE articles SET nom=%s, description=%s, prix=%s, stock=%s WHERE id=%s
-        """, (nom, description, prix, stock, id))
+            UPDATE articles SET nom=%s, description=%s, prix=%s, stock=%s, categorie_id=%s WHERE id=%s
+        """, (nom, description, prix, stock, categorie_id, id))
         conn.commit()
         cur.close()
         conn.close()
@@ -154,9 +209,11 @@ def modifier(id):
 
     cur.execute("SELECT * FROM articles WHERE id = %s", (id,))
     article = cur.fetchone()
+    cur.execute("SELECT * FROM categories")
+    categories = cur.fetchall()
     cur.close()
     conn.close()
-    return render_template('modifier.html', article=article)
+    return render_template('modifier.html', article=article, categories=categories)
 
 # SUPPRIMER UN ARTICLE
 @app.route('/supprimer/<int:id>')

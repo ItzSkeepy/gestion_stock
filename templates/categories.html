@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2 class="page-title">🗂️ Catégories</h2>
+
+<div class="d-flex justify-content-end mb-3">
+    <a href="/categories/ajouter" class="btn-saahel-primary">+ Nouvelle catégorie</a>
+</div>
+
+<div class="card-saahel">
+    <table class="table-saahel">
+        <thead>
+            <tr>
+                <th>NOM</th>
+                <th>DESCRIPTION</th>
+                <th>NB ARTICLES</th>
+                <th>ACTIONS</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for cat in categories %}
+            <tr>
+                <td style="font-weight:700;color:var(--ocre);">{{ cat[1] }}</td>
+                <td style="color:var(--text-light);">{{ cat[2] or '—' }}</td>
+                <td><span class="badge-ok">{{ cat[4] }}</span></td>
+                <td>
+                    <a href="/categories/supprimer/{{ cat[0] }}" class="btn-saahel-danger" onclick="return confirm('Supprimer cette catégorie ?')">🗑️ Supprimer</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
