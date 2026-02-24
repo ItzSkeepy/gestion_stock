@@ -8,12 +8,13 @@
 </head>
 <body>
     <nav class="navbar navbar-dark bg-dark px-4">
-        <a class="navbar-brand" href="/">📦 Gestion de Stock</a>
-        <div>
-            <a href="/dashboard" class="btn btn-info btn-sm me-2">📊 Tableau de bord</a>
-            <a href="/ajouter" class="btn btn-success btn-sm">+ Ajouter un article</a>
-        </div>
-    </nav>
+    <a class="navbar-brand" href="/">📦 Gestion de Stock</a>
+    <div>
+        <a href="/dashboard" class="btn btn-info btn-sm me-2">📊 Tableau de bord</a>
+        <a href="/ajouter" class="btn btn-success btn-sm me-2">+ Ajouter un article</a>
+        <a href="/logout" class="btn btn-danger btn-sm">🚪 Déconnexion</a>
+    </div>
+</nav>
 
     <div class="container mt-4">
         {% with messages = get_flashed_messages(with_categories=true) %}

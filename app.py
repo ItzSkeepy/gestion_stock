@@ -1,52 +1,38 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
+from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
+from werkzeug.security import generate_password_hash, check_password_hash
 import mysql.connector
-import qrcode
-import os
 import cloudinary
 import cloudinary.uploader
-
-cloudinary.config(
-    cloud_name = os.environ.get('CLOUDINARY_CLOUD_NAME'),
-    api_key = os.environ.get('CLOUDINARY_API_KEY'),
-    api_secret = os.environ.get('CLOUDINARY_API_SECRET')
-)
-
-db_config = {
-    'host': os.environ.get('MYSQL_HOST'),
-    'user': os.environ.get('MYSQL_USER'),
-    'password': os.environ.get('MYSQL_PASSWORD'),
-    'database': os.environ.get('MYSQL_DATABASE'),
-    'port': int(os.environ.get('MYSQL_PORT', 3306))
-}
+import qrcode
+import os
+import io
 from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 app.secret_key = 'ton_secret_key_ici'
 
-# Configuration MySQL
-db_config = {
-    'host': 'localhost',
-    'user': 'root',
-    'password': 'useradmin001',
-    'database': 'gestion_stock'
-}
+# Configuration Login
+login_manager = LoginManager(app)
+login_manager.login_view = 'login'
 
-def get_db():
-    host = os.environ.get('MYSQL_HOST')
-    user = os.environ.get('MYSQL_USER')
-    password = os.environ.get('MYSQL_PASSWORD')
-    database = os.environ.get('MYSQL_DATABASE')
-    port = int(os.environ.get('MYSQL_PORT', 3306))
-    
-    print(f"Connexion à : {host}:{port} user={user} db={database}")
-    
-    return mysql.connector.connect(
-        host=host,
-        user=user,
-        password=password,
-        database=database,
-        port=port
-    )
+class User(UserMixin):
+    def __init__(self, id):
+        self.id = id
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User(user_id)
+
+ADMIN_USERNAME = 'admin'
+ADMIN_PASSWORD = generate_password_hash('saaheladmin123')
+
+# Configuration Cloudinary
+cloudinary.config(
+    cloud_name = os.environ.get('CLOUDINARY_CLOUD_NAME'),
+    api_key = os.environ.get('CLOUDINARY_API_KEY'),
+    api_secret = os.environ.get('CLOUDINARY_API_SECRET')
+)
 
 # Configuration uploads
 UPLOAD_FOLDER = 'static/uploads'
@@ -56,8 +42,42 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
+def get_db():
+    host = os.environ.get('MYSQL_HOST')
+    user = os.environ.get('MYSQL_USER')
+    password = os.environ.get('MYSQL_PASSWORD')
+    database = os.environ.get('MYSQL_DATABASE')
+    port = int(os.environ.get('MYSQL_PORT', 3306))
+    return mysql.connector.connect(
+        host=host,
+        user=user,
+        password=password,
+        database=database,
+        port=port
+    )
+
+# LOGIN
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        if username == ADMIN_USERNAME and check_password_hash(ADMIN_PASSWORD, password):
+            login_user(User(1))
+            return redirect(url_for('index'))
+        flash('Identifiants incorrects !', 'danger')
+    return render_template('login.html')
+
+# LOGOUT
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('login'))
+
 # PAGE PRINCIPALE - Liste des articles
 @app.route('/')
+@login_required
 def index():
     conn = get_db()
     cur = conn.cursor()
@@ -69,6 +89,7 @@ def index():
 
 # AJOUTER UN ARTICLE
 @app.route('/ajouter', methods=['GET', 'POST'])
+@login_required
 def ajouter():
     if request.method == 'POST':
         nom = request.form['nom']
@@ -92,7 +113,6 @@ def ajouter():
         conn.commit()
         article_id = cur.lastrowid
 
-        import io
         base_url = os.environ.get('BASE_URL', 'http://localhost:5000')
         url_article = f"{base_url}/article/{article_id}"
         qr = qrcode.make(url_article)
@@ -114,6 +134,7 @@ def ajouter():
 
 # MODIFIER UN ARTICLE
 @app.route('/modifier/<int:id>', methods=['GET', 'POST'])
+@login_required
 def modifier(id):
     conn = get_db()
     cur = conn.cursor()
@@ -139,6 +160,7 @@ def modifier(id):
 
 # SUPPRIMER UN ARTICLE
 @app.route('/supprimer/<int:id>')
+@login_required
 def supprimer(id):
     conn = get_db()
     cur = conn.cursor()
@@ -150,7 +172,7 @@ def supprimer(id):
     flash('Article supprimé !', 'danger')
     return redirect(url_for('index'))
 
-# PAGE PUBLIQUE - Scan QR code
+# PAGE PUBLIQUE - Scan QR code (pas de login_required ici !)
 @app.route('/article/<int:id>')
 def article_public(id):
     conn = get_db()
@@ -161,23 +183,43 @@ def article_public(id):
     conn.close()
     return render_template('article_public.html', article=article)
 
-# AJOUTER TABLEAU DE BORD
+# ENREGISTRER UNE VENTE (pas de login_required ici !)
+@app.route('/vendre/<int:id>', methods=['POST'])
+def vendre(id):
+    quantite = int(request.form['quantite'])
+    conn = get_db()
+    cur = conn.cursor()
+
+    cur.execute("SELECT stock FROM articles WHERE id = %s", (id,))
+    article = cur.fetchone()
+
+    if article and article[0] >= quantite:
+        cur.execute("UPDATE articles SET stock = stock - %s WHERE id = %s", (quantite, id))
+        cur.execute("INSERT INTO ventes (article_id, quantite) VALUES (%s, %s)", (id, quantite))
+        conn.commit()
+        flash('success', 'vente_ok')
+    else:
+        flash('Stock insuffisant !', 'danger')
+
+    cur.close()
+    conn.close()
+    return redirect(url_for('article_public', id=id))
+
+# TABLEAU DE BORD
 @app.route('/dashboard')
+@login_required
 def dashboard():
     conn = get_db()
     cur = conn.cursor()
 
-    # Total des articles
     cur.execute("SELECT COUNT(*) FROM articles")
     total_articles = cur.fetchone()[0]
 
-    # Total des ventes
     cur.execute("SELECT COUNT(*), SUM(quantite) FROM ventes")
     ventes_stats = cur.fetchone()
     total_ventes = ventes_stats[0]
     total_quantite = ventes_stats[1] or 0
 
-    # Chiffre d'affaires total
     cur.execute("""
         SELECT SUM(a.prix * v.quantite) 
         FROM ventes v 
@@ -185,11 +227,9 @@ def dashboard():
     """)
     chiffre_affaires = cur.fetchone()[0] or 0
 
-    # Articles avec stock bas (<=5)
     cur.execute("SELECT * FROM articles WHERE stock <= 5")
     stock_bas = cur.fetchall()
 
-    # Historique des ventes
     cur.execute("""
         SELECT v.id, a.nom, v.quantite, a.prix, (v.quantite * a.prix) as total, v.date_vente
         FROM ventes v
@@ -198,7 +238,6 @@ def dashboard():
     """)
     historique = cur.fetchall()
 
-    # Articles les plus vendus
     cur.execute("""
         SELECT a.nom, SUM(v.quantite) as total_vendu
         FROM ventes v
@@ -221,28 +260,6 @@ def dashboard():
         historique=historique,
         top_articles=top_articles
     )
-
-# ENREGISTRER UNE VENTE
-@app.route('/vendre/<int:id>', methods=['POST'])
-def vendre(id):
-    quantite = int(request.form['quantite'])
-    conn = get_db()
-    cur = conn.cursor()
-
-    cur.execute("SELECT stock FROM articles WHERE id = %s", (id,))
-    article = cur.fetchone()
-
-    if article and article[0] >= quantite:
-        cur.execute("UPDATE articles SET stock = stock - %s WHERE id = %s", (quantite, id))
-        cur.execute("INSERT INTO ventes (article_id, quantite) VALUES (%s, %s)", (id, quantite))
-        conn.commit()
-        flash('success', 'vente_ok')
-    else:
-        flash('Stock insuffisant !', 'danger')
-
-    cur.close()
-    conn.close()
-    return redirect(url_for('article_public', id=id))
 
 if __name__ == '__main__':
     app.run(debug=False, host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
