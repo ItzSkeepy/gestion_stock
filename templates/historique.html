@@ -1,39 +1,28 @@
 {% extends 'base.html' %}
 {% block content %}
 <h2 class="page-title">📜 Historique — {{ article[1] }}</h2>
-
 <div style="margin-bottom:1.5rem;">
     <a href="/" class="btn-saahel-secondary">← Retour à l'inventaire</a>
 </div>
-
 <div class="card-saahel">
     {% if historique %}
     <table class="table-saahel">
         <thead>
-            <tr>
-                <th>CHAMP MODIFIÉ</th>
-                <th>ANCIENNE VALEUR</th>
-                <th>NOUVELLE VALEUR</th>
-                <th>DATE</th>
-            </tr>
+            <tr><th>CHAMP MODIFIÉ</th><th>ANCIENNE VALEUR</th><th>NOUVELLE VALEUR</th><th>DATE</th></tr>
         </thead>
         <tbody>
             {% for h in historique %}
             <tr>
-                <td>
-                    <span style="background:rgba(74,144,217,0.15);color:#7EC8F0;padding:4px 12px;border-radius:20px;font-size:0.82rem;font-weight:600;border:1px solid rgba(74,144,217,0.3);">
-                        {{ h[2] }}
-                    </span>
-                </td>
-                <td style="color:#FF9090;text-decoration:line-through;font-size:0.9rem;">{{ h[3] }}</td>
-                <td style="color:#7FE0A0;font-weight:600;">{{ h[4] }}</td>
-                <td style="color:#7AAFD4;font-size:0.85rem;">{{ h[5].strftime('%d/%m/%Y %H:%M') }}</td>
+                <td><span style="background:rgba(41,182,246,0.15);color:#81D4FA;padding:4px 12px;border-radius:20px;font-size:0.82rem;font-weight:600;border:1px solid rgba(41,182,246,0.35);">{{ h[2] }}</span></td>
+                <td style="color:#EF9A9A;text-decoration:line-through;font-size:0.9rem;">{{ h[3] }}</td>
+                <td style="color:#A5D6A7;font-weight:600;">{{ h[4] }}</td>
+                <td style="color:#64B0D8;font-size:0.85rem;">{{ h[5].strftime('%d/%m/%Y %H:%M') }}</td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
     {% else %}
-    <div style="padding:60px;text-align:center;color:#7AAFD4;">
+    <div style="padding:60px;text-align:center;color:#64B0D8;">
         <div style="font-size:3rem;margin-bottom:10px;">🌙</div>
         <p>Aucune modification enregistrée pour cet article.</p>
     </div>

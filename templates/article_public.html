@@ -7,107 +7,46 @@
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Raleway:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-
         body {
             font-family: 'Raleway', sans-serif;
-            background: linear-gradient(180deg, #050B1A 0%, #0A1628 50%, #0D1F3C 100%);
+            background: linear-gradient(170deg, #010810 0%, #021428 15%, #062550 30%, #0D47A1 50%, #1976D2 65%, #29B6F6 82%, #81D4FA 100%);
             background-attachment: fixed;
-            min-height: 100vh;
-            padding: 20px;
+            min-height: 100vh; padding: 20px;
         }
-
         .header-bar { text-align: center; padding: 15px; margin-bottom: 20px; }
-        .brand { font-family: 'Cinzel', serif; font-size: 1.2rem; font-weight: 700; color: #7EC8F0; letter-spacing: 4px; text-shadow: 0 0 15px rgba(126,200,240,0.5); }
-
-        .card {
-            max-width: 480px; margin: 0 auto;
-            background: rgba(10,22,40,0.8);
-            backdrop-filter: blur(15px);
-            border: 1px solid rgba(74,144,217,0.2);
-            border-radius: 20px; overflow: hidden;
-            box-shadow: 0 8px 40px rgba(0,0,0,0.4), inset 0 1px 0 rgba(74,144,217,0.1);
-            animation: fadeInUp 0.5s ease;
-        }
-
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
+        .brand { font-family: 'Cinzel', serif; font-size: 1.2rem; font-weight: 700; color: #81D4FA; letter-spacing: 4px; text-shadow: 0 0 15px rgba(129,212,250,0.6); }
+        .card { max-width: 480px; margin: 0 auto; background: rgba(1,8,16,0.75); backdrop-filter: blur(15px); border: 1px solid rgba(41,182,246,0.25); border-radius: 20px; overflow: hidden; box-shadow: 0 8px 40px rgba(0,0,0,0.5); animation: fadeInUp 0.5s ease; }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         .product-image { width: 100%; height: 260px; object-fit: cover; }
         .card-body { padding: 25px; }
-
-        .product-name { font-family: 'Cinzel', serif; font-size: 1.4rem; font-weight: 700; color: #EFF8FF; margin-bottom: 8px; text-shadow: 0 0 10px rgba(126,200,240,0.2); }
-        .product-desc { color: #7AAFD4; font-size: 0.9rem; line-height: 1.6; margin-bottom: 18px; }
-
-        .price-tag {
-            display: inline-block;
-            background: linear-gradient(135deg, #2256A8, #4A90D9);
-            color: white; font-family: 'Cinzel', serif;
-            font-size: 1.3rem; font-weight: 700;
-            padding: 8px 20px; border-radius: 25px; margin-bottom: 15px;
-            box-shadow: 0 4px 15px rgba(74,144,217,0.4);
-        }
-
-        .stock-info { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; font-size: 0.9rem; color: #7AAFD4; }
-
-        .badge-ok { background: linear-gradient(135deg, #1A7A3A, #0D4D24); color: #7FE0A0; padding: 5px 14px; border-radius: 20px; font-size: 0.82rem; font-weight: 600; border: 1px solid rgba(127,224,160,0.3); }
-        .badge-low { background: linear-gradient(135deg, #7A1A1A, #4D0D0D); color: #FF9090; padding: 5px 14px; border-radius: 20px; font-size: 0.82rem; font-weight: 600; animation: pulse 2s infinite; }
-        @keyframes pulse {
-            0%, 100% { box-shadow: 0 0 0 0 rgba(255,100,100,0.4); }
-            50% { box-shadow: 0 0 0 6px rgba(255,100,100,0); }
-        }
-
-        .divider { height: 1px; background: linear-gradient(90deg, transparent, rgba(74,144,217,0.3), transparent); margin: 20px 0; }
-
-        .sale-title { font-family: 'Cinzel', serif; font-size: 0.95rem; color: #7EC8F0; letter-spacing: 1px; margin-bottom: 15px; }
-
-        .form-label { display: block; font-weight: 600; color: #7EC8F0; font-size: 0.85rem; letter-spacing: 0.5px; margin-bottom: 8px; }
-
-        .form-input {
-            width: 100%; padding: 12px 15px;
-            border: 1.5px solid rgba(74,144,217,0.3); border-radius: 10px;
-            background: rgba(10,22,40,0.8); color: #D0E8FF;
-            font-family: 'Raleway', sans-serif; font-size: 0.95rem;
-            transition: all 0.3s ease; outline: none; margin-bottom: 15px;
-        }
-        .form-input:focus { border-color: #4A90D9; box-shadow: 0 0 0 3px rgba(74,144,217,0.15); }
-
-        .btn-validate {
-            width: 100%; padding: 14px;
-            background: linear-gradient(135deg, #2256A8, #4A90D9);
-            color: white; border: none; border-radius: 12px;
-            font-family: 'Cinzel', serif; font-size: 0.95rem; font-weight: 700;
-            letter-spacing: 1.5px; cursor: pointer; transition: all 0.3s ease;
-        }
-        .btn-validate:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(74,144,217,0.5); }
-
+        .product-name { font-family: 'Cinzel', serif; font-size: 1.4rem; font-weight: 700; color: #F0FAFF; margin-bottom: 8px; }
+        .product-desc { color: #64B0D8; font-size: 0.9rem; line-height: 1.6; margin-bottom: 18px; }
+        .price-tag { display: inline-block; background: linear-gradient(135deg, #1565C0, #29B6F6); color: white; font-family: 'Cinzel', serif; font-size: 1.3rem; font-weight: 700; padding: 8px 20px; border-radius: 25px; margin-bottom: 15px; box-shadow: 0 4px 15px rgba(41,182,246,0.4); }
+        .stock-info { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; font-size: 0.9rem; color: #64B0D8; }
+        .badge-ok { background: linear-gradient(135deg, #1B5E20, #0D3B13); color: #A5D6A7; padding: 5px 14px; border-radius: 20px; font-size: 0.82rem; font-weight: 600; }
+        .badge-low { background: linear-gradient(135deg, #7A1A1A, #4D0D0D); color: #EF9A9A; padding: 5px 14px; border-radius: 20px; font-size: 0.82rem; font-weight: 600; animation: pulse 2s infinite; }
+        @keyframes pulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(239,154,154,0.4); } 50% { box-shadow: 0 0 0 6px rgba(239,154,154,0); } }
+        .divider { height: 1px; background: linear-gradient(90deg, transparent, rgba(41,182,246,0.4), transparent); margin: 20px 0; }
+        .sale-title { font-family: 'Cinzel', serif; font-size: 0.95rem; color: #81D4FA; letter-spacing: 1px; margin-bottom: 15px; }
+        .form-label { display: block; font-weight: 600; color: #81D4FA; font-size: 0.85rem; margin-bottom: 8px; }
+        .form-input { width: 100%; padding: 12px 15px; border: 1.5px solid rgba(41,182,246,0.3); border-radius: 10px; background: rgba(1,8,16,0.8); color: #CEE9FF; font-family: 'Raleway', sans-serif; font-size: 0.95rem; transition: all 0.3s; outline: none; margin-bottom: 15px; }
+        .form-input:focus { border-color: #29B6F6; box-shadow: 0 0 0 3px rgba(41,182,246,0.2); }
+        .btn-validate { width: 100%; padding: 14px; background: linear-gradient(135deg, #1565C0, #29B6F6); color: white; border: none; border-radius: 12px; font-family: 'Cinzel', serif; font-size: 0.95rem; font-weight: 700; letter-spacing: 1.5px; cursor: pointer; transition: all 0.3s; }
+        .btn-validate:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(41,182,246,0.5); }
         .success-section { text-align: center; padding: 20px 0; }
         .success-icon { font-size: 4rem; margin-bottom: 12px; animation: bounceIn 0.6s ease; }
-        @keyframes bounceIn {
-            0% { transform: scale(0); }
-            60% { transform: scale(1.2); }
-            100% { transform: scale(1); }
-        }
-        .success-title { font-family: 'Cinzel', serif; font-size: 1.4rem; font-weight: 700; color: #7FE0A0; margin-bottom: 8px; }
-        .success-desc { color: #7AAFD4; font-size: 0.9rem; margin-bottom: 20px; }
-
-        .btn-back { display: inline-block; padding: 10px 28px; background: linear-gradient(135deg, #2256A8, #4A90D9); color: white; text-decoration: none; border-radius: 25px; font-family: 'Cinzel', serif; font-size: 0.85rem; letter-spacing: 1px; transition: all 0.3s ease; }
-        .btn-back:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(74,144,217,0.5); color: white; }
-
-        .alert-danger { background: rgba(60,13,13,0.5); border: 1px solid rgba(255,100,100,0.3); border-left: 3px solid #FF7070; border-radius: 10px; padding: 10px 15px; color: #FF9090; font-size: 0.87rem; margin-bottom: 15px; }
+        @keyframes bounceIn { 0% { transform: scale(0); } 60% { transform: scale(1.2); } 100% { transform: scale(1); } }
+        .success-title { font-family: 'Cinzel', serif; font-size: 1.4rem; font-weight: 700; color: #A5D6A7; margin-bottom: 8px; }
+        .success-desc { color: #64B0D8; font-size: 0.9rem; margin-bottom: 20px; }
+        .btn-back { display: inline-block; padding: 10px 28px; background: linear-gradient(135deg, #1565C0, #29B6F6); color: white; text-decoration: none; border-radius: 25px; font-family: 'Cinzel', serif; font-size: 0.85rem; letter-spacing: 1px; transition: all 0.3s; }
+        .btn-back:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(41,182,246,0.5); color: white; }
+        .alert-danger { background: rgba(60,13,13,0.5); border: 1px solid rgba(239,154,154,0.3); border-left: 3px solid #EF5350; border-radius: 10px; padding: 10px 15px; color: #EF9A9A; font-size: 0.87rem; margin-bottom: 15px; }
     </style>
 </head>
 <body>
-    <div class="header-bar">
-        <div class="brand">🌙 SAAHEL</div>
-    </div>
-
+    <div class="header-bar"><div class="brand">🌙 SAAHEL</div></div>
     <div class="card">
-        {% if article[5] %}
-            <img src="{{ article[5] }}" class="product-image" alt="{{ article[1] }}">
-        {% endif %}
-
+        {% if article[5] %}<img src="{{ article[5] }}" class="product-image" alt="{{ article[1] }}">{% endif %}
         <div class="card-body">
             {% with messages = get_flashed_messages(with_categories=true) %}
                 {% if messages %}
@@ -116,7 +55,7 @@
                         <div class="success-section">
                             <div class="success-icon">✅</div>
                             <div class="success-title">Vente Validée !</div>
-                            <p class="success-desc">La vente a été enregistrée avec succès et le stock a été mis à jour.</p>
+                            <p class="success-desc">La vente a été enregistrée et le stock mis à jour.</p>
                             <a href="/article/{{ article[0] }}" class="btn-back">Retour à l'article</a>
                         </div>
                         {% else %}
@@ -124,28 +63,21 @@
                         {% endif %}
                     {% endfor %}
                 {% else %}
-
                 <div class="product-name">{{ article[1] }}</div>
                 <p class="product-desc">{{ article[2] }}</p>
                 <div class="price-tag">💰 {{ article[3] }} FCFA</div>
                 <div class="stock-info">
-                    Stock disponible :
-                    {% if article[4] <= 5 %}
-                        <span class="badge-low">{{ article[4] }} ⚠️ Stock bas</span>
-                    {% else %}
-                        <span class="badge-ok">{{ article[4] }}</span>
-                    {% endif %}
+                    Stock :
+                    {% if article[4] <= 5 %}<span class="badge-low">{{ article[4] }} ⚠️</span>
+                    {% else %}<span class="badge-ok">{{ article[4] }}</span>{% endif %}
                 </div>
-
                 <div class="divider"></div>
-
                 <div class="sale-title">ENREGISTRER UNE VENTE</div>
                 <form method="POST" action="/vendre/{{ article[0] }}">
                     <label class="form-label">Quantité vendue</label>
                     <input type="number" name="quantite" class="form-input" min="1" max="{{ article[4] }}" placeholder="1" required>
                     <button type="submit" class="btn-validate">✅ VALIDER LA VENTE</button>
                 </form>
-
                 {% endif %}
             {% endwith %}
         </div>

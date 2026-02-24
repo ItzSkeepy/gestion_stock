@@ -11,45 +11,28 @@
         body {
             font-family: 'Raleway', sans-serif;
             min-height: 100vh;
-            background: radial-gradient(ellipse at 50% 0%, #0A2040 0%, #020812 50%, #000510 100%);
+            background: linear-gradient(170deg,
+                #010810 0%,
+                #021428 15%,
+                #062550 30%,
+                #0D47A1 50%,
+                #1976D2 65%,
+                #29B6F6 82%,
+                #81D4FA 100%
+            );
             display: flex; align-items: center; justify-content: center;
             overflow: hidden;
         }
 
-        .stars-container { position: fixed; inset: 0; z-index: 0; }
+        /* Cercles lumineux */
+        .glow { position: fixed; border-radius: 50%; filter: blur(90px); pointer-events: none; z-index: 0; }
+        .glow1 { width: 600px; height: 600px; background: rgba(13,71,161,0.4); top: -150px; left: -150px; }
+        .glow2 { width: 500px; height: 500px; background: rgba(41,182,246,0.3); bottom: -100px; right: -100px; }
+        .glow3 { width: 350px; height: 350px; background: rgba(129,212,250,0.2); top: 50%; left: 50%; transform: translate(-50%,-50%); }
 
-        /* Petites étoiles */
-        @keyframes twinkleS {
-            0%, 100% { opacity: 0.2; transform: scale(1); }
-            50% { opacity: 1; transform: scale(1.6); box-shadow: 0 0 6px 2px rgba(255,255,255,0.9); }
-        }
-        /* Moyennes étoiles */
-        @keyframes twinkleM {
-            0%, 100% { opacity: 0.3; transform: scale(1); box-shadow: 0 0 3px rgba(150,210,255,0.4); }
-            50% { opacity: 1; transform: scale(2); box-shadow: 0 0 15px 5px rgba(150,210,255,1), 0 0 30px 10px rgba(74,144,217,0.5); }
-        }
-        /* Grandes étoiles très brillantes */
-        @keyframes twinkleL {
-            0%, 100% { opacity: 0.4; transform: scale(1); box-shadow: 0 0 8px 3px rgba(200,230,255,0.6); }
-            33% { opacity: 1; transform: scale(2.5); box-shadow: 0 0 25px 10px rgba(255,255,255,1), 0 0 50px 20px rgba(150,210,255,0.7), 0 0 80px 30px rgba(74,144,217,0.3); }
-            66% { opacity: 0.7; transform: scale(1.5); box-shadow: 0 0 12px 4px rgba(200,230,255,0.8); }
-        }
-        /* Étoiles dorées */
-        @keyframes twinkleGold {
-            0%, 100% { opacity: 0.4; transform: scale(1); box-shadow: 0 0 6px 2px rgba(240,192,64,0.5); }
-            50% { opacity: 1; transform: scale(2.2); box-shadow: 0 0 20px 8px rgba(255,224,128,1), 0 0 40px 15px rgba(240,192,64,0.6); }
-        }
-
-        .star { position: absolute; border-radius: 50%; }
-
-        .milky-way {
-            position: fixed; inset: 0; z-index: 0;
-            background: radial-gradient(ellipse 70% 15% at 65% 25%, rgba(100,160,255,0.07) 0%, transparent 70%);
-            pointer-events: none;
-        }
-
+        /* Lune */
         .moon {
-            position: fixed; top: 8%; right: 12%;
+            position: fixed; top: 6%; right: 9%;
             width: 65px; height: 65px;
             background: radial-gradient(circle at 35% 35%, #FFF8D0, #F0C040 60%, #C8960A 100%);
             border-radius: 50%; z-index: 1;
@@ -57,87 +40,61 @@
         }
         @keyframes moonGlow {
             0%, 100% { box-shadow: 0 0 25px 10px rgba(240,192,64,0.5), 0 0 70px 25px rgba(240,192,64,0.2); }
-            50% { box-shadow: 0 0 40px 15px rgba(255,220,80,0.7), 0 0 100px 40px rgba(240,192,64,0.3); }
+            50% { box-shadow: 0 0 40px 15px rgba(255,224,80,0.7), 0 0 100px 40px rgba(240,192,64,0.3); }
         }
 
+        /* Dunes */
         .dunes { position: fixed; bottom: 0; left: 0; right: 0; z-index: 1; pointer-events: none; }
         .dune { position: absolute; bottom: 0; border-radius: 50%; }
-        .dune1 { width: 130%; left: -15%; height: 150px; background: linear-gradient(180deg, rgba(8,18,36,0.7), rgba(5,11,26,0.9)); }
-        .dune2 { width: 110%; left: -5%; height: 95px; background: linear-gradient(180deg, rgba(13,31,60,0.6), rgba(10,22,40,0.8)); }
-        .dune3 { width: 90%; left: 5%; height: 58px; background: rgba(26,58,107,0.4); }
+        .dune1 { width: 130%; left: -15%; height: 150px; background: linear-gradient(180deg, rgba(1,8,16,0.5), rgba(1,8,16,0.9)); }
+        .dune2 { width: 110%; left: -5%; height: 95px; background: linear-gradient(180deg, rgba(2,20,40,0.5), rgba(2,20,40,0.85)); }
+        .dune3 { width: 90%; left: 5%; height: 58px; background: rgba(6,37,80,0.5); }
 
-        .login-container {
-            position: relative; z-index: 10;
-            width: 100%; max-width: 420px; padding: 20px;
-            animation: fadeInUp 0.6s ease;
-        }
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        /* CARTE */
+        .login-container { position: relative; z-index: 10; width: 100%; max-width: 420px; padding: 20px; animation: fadeInUp 0.6s ease; }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
 
         .login-card {
-            background: rgba(6,15,32,0.8);
+            background: rgba(1,8,16,0.75);
             backdrop-filter: blur(25px);
-            border: 1px solid rgba(74,144,217,0.25);
+            border: 1px solid rgba(41,182,246,0.3);
             border-radius: 24px; padding: 40px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.6), inset 0 1px 0 rgba(126,200,240,0.1);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.6), inset 0 1px 0 rgba(129,212,250,0.12);
         }
 
         .logo-section { text-align: center; margin-bottom: 35px; }
-
         .logo-circle {
             width: 75px; height: 75px;
-            background: linear-gradient(135deg, #4A90D9, #1A3A6B);
+            background: linear-gradient(135deg, #1565C0, #29B6F6);
             border-radius: 50%;
             display: flex; align-items: center; justify-content: center;
             font-size: 2.2rem; margin: 0 auto 15px;
             animation: logoGlow 3s ease-in-out infinite;
         }
         @keyframes logoGlow {
-            0%, 100% { box-shadow: 0 0 25px rgba(74,144,217,0.6), 0 0 50px rgba(74,144,217,0.2); }
-            50% { box-shadow: 0 0 50px rgba(126,200,240,0.9), 0 0 100px rgba(74,144,217,0.5); }
+            0%, 100% { box-shadow: 0 0 25px rgba(41,182,246,0.6), 0 0 50px rgba(41,182,246,0.2); }
+            50% { box-shadow: 0 0 50px rgba(129,212,250,0.9), 0 0 100px rgba(41,182,246,0.5); }
         }
 
-        .brand-name {
-            font-family: 'Cinzel', serif; font-size: 2.2rem; font-weight: 700;
-            color: #7EC8F0; letter-spacing: 6px;
-            text-shadow: 0 0 20px rgba(126,200,240,0.7), 0 0 40px rgba(74,144,217,0.4);
-        }
-        .brand-subtitle { color: rgba(126,200,240,0.5); font-size: 0.75rem; letter-spacing: 3px; text-transform: uppercase; margin-top: 5px; }
+        .brand-name { font-family: 'Cinzel', serif; font-size: 2.2rem; font-weight: 700; color: #81D4FA; letter-spacing: 6px; text-shadow: 0 0 20px rgba(129,212,250,0.8), 0 0 40px rgba(41,182,246,0.5); }
+        .brand-subtitle { color: rgba(129,212,250,0.5); font-size: 0.75rem; letter-spacing: 3px; text-transform: uppercase; margin-top: 5px; }
 
         .form-group { margin-bottom: 20px; }
-        .form-label { display: block; color: rgba(126,200,240,0.7); font-size: 0.82rem; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 8px; }
+        .form-label { display: block; color: rgba(129,212,250,0.75); font-size: 0.82rem; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 8px; }
+        .form-input { width: 100%; padding: 12px 18px; background: rgba(2,14,28,0.85); border: 1.5px solid rgba(41,182,246,0.25); border-radius: 12px; color: #CEE9FF; font-family: 'Raleway', sans-serif; font-size: 0.95rem; transition: all 0.3s; outline: none; }
+        .form-input::placeholder { color: rgba(129,212,250,0.25); }
+        .form-input:focus { border-color: #29B6F6; background: rgba(6,37,80,0.9); box-shadow: 0 0 0 3px rgba(41,182,246,0.2); color: #F0FAFF; }
 
-        .form-input {
-            width: 100%; padding: 12px 18px;
-            background: rgba(10,22,40,0.8); border: 1.5px solid rgba(74,144,217,0.25);
-            border-radius: 12px; color: #B8E0F7;
-            font-family: 'Raleway', sans-serif; font-size: 0.95rem;
-            transition: all 0.3s ease; outline: none;
-        }
-        .form-input::placeholder { color: rgba(126,200,240,0.25); }
-        .form-input:focus { border-color: #4A90D9; background: rgba(13,31,60,0.9); box-shadow: 0 0 0 3px rgba(74,144,217,0.2); color: #EFF8FF; }
+        .btn-login { width: 100%; padding: 14px; background: linear-gradient(135deg, #1565C0, #29B6F6); color: white; border: none; border-radius: 12px; font-family: 'Cinzel', serif; font-size: 1rem; font-weight: 700; letter-spacing: 2px; cursor: pointer; transition: all 0.3s; margin-top: 10px; }
+        .btn-login:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(41,182,246,0.6); }
 
-        .btn-login {
-            width: 100%; padding: 14px;
-            background: linear-gradient(135deg, #2256A8, #4A90D9);
-            color: white; border: none; border-radius: 12px;
-            font-family: 'Cinzel', serif; font-size: 1rem; font-weight: 700;
-            letter-spacing: 2px; cursor: pointer; transition: all 0.3s ease; margin-top: 10px;
-        }
-        .btn-login:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(74,144,217,0.6); }
-
-        .alert-danger {
-            background: rgba(60,13,13,0.5); border: 1px solid rgba(255,100,100,0.3);
-            border-left: 3px solid #FF7070; border-radius: 10px;
-            padding: 10px 15px; color: #FF9090; font-size: 0.87rem; margin-bottom: 20px;
-        }
+        .alert-danger { background: rgba(60,13,13,0.5); border: 1px solid rgba(239,154,154,0.3); border-left: 3px solid #EF5350; border-radius: 10px; padding: 10px 15px; color: #EF9A9A; font-size: 0.87rem; margin-bottom: 20px; }
     </style>
 </head>
 <body>
-    <div class="stars-container" id="starsContainer"></div>
-    <div class="milky-way"></div>
+    <div class="glow glow1"></div>
+    <div class="glow glow2"></div>
+    <div class="glow glow3"></div>
     <div class="moon"></div>
     <div class="dunes">
         <div class="dune dune1"></div>
@@ -174,57 +131,5 @@
             </form>
         </div>
     </div>
-
-    <script>
-        const container = document.getElementById('starsContainer');
-
-        // 150 petites étoiles
-        for (let i = 0; i < 150; i++) {
-            const s = document.createElement('div');
-            s.className = 'star';
-            const size = Math.random() * 1.5 + 0.5;
-            const color = i % 5 === 0 ? '#FFE080' : i % 4 === 0 ? '#A0D0FF' : '#FFFFFF';
-            s.style.cssText = `
-                width:${size}px; height:${size}px;
-                top:${Math.random()*85}%; left:${Math.random()*100}%;
-                background:${color};
-                animation: twinkleS ${Math.random()*3+2}s ease-in-out infinite;
-                animation-delay: -${Math.random()*5}s;
-            `;
-            container.appendChild(s);
-        }
-
-        // 60 étoiles moyennes
-        for (let i = 0; i < 60; i++) {
-            const s = document.createElement('div');
-            s.className = 'star';
-            const size = Math.random() * 2 + 1.5;
-            const isGold = i % 6 === 0;
-            s.style.cssText = `
-                width:${size}px; height:${size}px;
-                top:${Math.random()*80}%; left:${Math.random()*100}%;
-                background:${isGold ? '#FFE080' : '#A0D0FF'};
-                animation: ${isGold ? 'twinkleGold' : 'twinkleM'} ${Math.random()*4+2}s ease-in-out infinite;
-                animation-delay: -${Math.random()*6}s;
-            `;
-            container.appendChild(s);
-        }
-
-        // 20 grandes étoiles super brillantes
-        for (let i = 0; i < 20; i++) {
-            const s = document.createElement('div');
-            s.className = 'star';
-            const size = Math.random() * 3 + 3;
-            const isGold = i % 4 === 0;
-            s.style.cssText = `
-                width:${size}px; height:${size}px;
-                top:${Math.random()*75}%; left:${Math.random()*100}%;
-                background:${isGold ? '#FFE080' : '#FFFFFF'};
-                animation: ${isGold ? 'twinkleGold' : 'twinkleL'} ${Math.random()*5+3}s ease-in-out infinite;
-                animation-delay: -${Math.random()*8}s;
-            `;
-            container.appendChild(s);
-        }
-    </script>
 </body>
 </html>

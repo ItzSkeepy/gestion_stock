@@ -7,63 +7,26 @@
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Raleway:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        body {
-            font-family: 'Raleway', sans-serif;
-            background: linear-gradient(180deg, #050B1A 0%, #0A1628 50%, #0D1F3C 100%);
-            min-height: 100vh;
-            display: flex; flex-direction: column;
-            align-items: center; justify-content: center; padding: 20px;
-        }
-
+        body { font-family: 'Raleway', sans-serif; background: linear-gradient(170deg, #010810 0%, #021428 15%, #062550 30%, #0D47A1 50%, #1976D2 65%, #29B6F6 82%, #81D4FA 100%); background-attachment: fixed; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
         .no-print { margin-bottom: 30px; display: flex; gap: 12px; }
-
-        .btn-print {
-            padding: 12px 30px;
-            background: linear-gradient(135deg, #2256A8, #4A90D9);
-            color: white; border: none; border-radius: 25px;
-            font-family: 'Cinzel', serif; font-size: 0.9rem; font-weight: 700;
-            letter-spacing: 1.5px; cursor: pointer; transition: all 0.3s ease;
-        }
-        .btn-print:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(74,144,217,0.5); }
-
-        .btn-back {
-            padding: 12px 24px;
-            background: rgba(74,144,217,0.1); color: #7EC8F0;
-            border: 1px solid rgba(74,144,217,0.3); border-radius: 25px;
-            font-family: 'Raleway', sans-serif; font-weight: 600;
-            text-decoration: none; transition: all 0.3s ease;
-        }
-        .btn-back:hover { background: rgba(74,144,217,0.2); color: #EFF8FF; }
-
+        .btn-print { padding: 12px 30px; background: linear-gradient(135deg, #1565C0, #29B6F6); color: white; border: none; border-radius: 25px; font-family: 'Cinzel', serif; font-size: 0.9rem; font-weight: 700; letter-spacing: 1.5px; cursor: pointer; transition: all 0.3s; }
+        .btn-print:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(41,182,246,0.5); }
+        .btn-back { padding: 12px 24px; background: rgba(41,182,246,0.1); color: #81D4FA; border: 1px solid rgba(41,182,246,0.35); border-radius: 25px; font-family: 'Raleway', sans-serif; font-weight: 600; text-decoration: none; transition: all 0.3s; }
+        .btn-back:hover { background: rgba(41,182,246,0.25); color: #F0FAFF; }
         .label-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; max-width: 900px; }
-
-        .label {
-            background: rgba(10,22,40,0.9);
-            border: 1px solid rgba(74,144,217,0.3);
-            border-radius: 16px; padding: 20px; text-align: center;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.3), inset 0 1px 0 rgba(74,144,217,0.1);
-            position: relative; overflow: hidden;
-        }
-        .label::before {
-            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
-            background: linear-gradient(90deg, #2256A8, #4A90D9, #7EC8F0);
-        }
-
-        .label-brand { font-family: 'Cinzel', serif; font-size: 0.7rem; letter-spacing: 3px; color: #7EC8F0; margin-bottom: 10px; text-shadow: 0 0 10px rgba(126,200,240,0.4); }
-        .label-qr { width: 120px; height: 120px; margin: 0 auto 12px; border: 2px solid rgba(74,144,217,0.3); border-radius: 8px; }
-        .label-name { font-family: 'Cinzel', serif; font-size: 0.85rem; font-weight: 700; color: #EFF8FF; margin-bottom: 6px; line-height: 1.3; }
-        .label-price { font-size: 1.1rem; font-weight: 700; color: #7EC8F0; margin-bottom: 4px; }
-        .label-category { font-size: 0.72rem; color: #7AAFD4; letter-spacing: 1px; text-transform: uppercase; }
-
+        .label { background: rgba(1,8,16,0.8); border: 1px solid rgba(41,182,246,0.3); border-radius: 16px; padding: 20px; text-align: center; box-shadow: 0 4px 20px rgba(0,0,0,0.4); position: relative; overflow: hidden; }
+        .label::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, #1565C0, #29B6F6, #81D4FA); }
+        .label-brand { font-family: 'Cinzel', serif; font-size: 0.7rem; letter-spacing: 3px; color: #81D4FA; margin-bottom: 10px; text-shadow: 0 0 10px rgba(129,212,250,0.5); }
+        .label-qr { width: 120px; height: 120px; margin: 0 auto 12px; border: 2px solid rgba(41,182,246,0.3); border-radius: 8px; }
+        .label-name { font-family: 'Cinzel', serif; font-size: 0.85rem; font-weight: 700; color: #F0FAFF; margin-bottom: 6px; }
+        .label-price { font-size: 1.1rem; font-weight: 700; color: #81D4FA; }
         @media print {
             .no-print { display: none !important; }
             body { background: white; padding: 10px; }
-            .label { background: white; box-shadow: none; border: 1px solid #ddd; break-inside: avoid; }
-            .label::before { background: #4A90D9; }
-            .label-brand, .label-name { color: #0A1628; }
-            .label-price { color: #2256A8; }
-            .label-category { color: #555; }
+            .label { background: white; box-shadow: none; border: 1px solid #ccc; break-inside: avoid; }
+            .label::before { background: #29B6F6; }
+            .label-brand, .label-name { color: #021428; }
+            .label-price { color: #1565C0; }
             .label-grid { gap: 10px; }
         }
     </style>
@@ -73,7 +36,6 @@
         <button onclick="window.print()" class="btn-print">🖨️ IMPRIMER</button>
         <a href="/" class="btn-back">← Retour</a>
     </div>
-
     <div class="label-grid">
         {% for i in range(6) %}
         <div class="label">

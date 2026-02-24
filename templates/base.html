@@ -8,191 +8,151 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         :root {
-            --night: #050B1A;
-            --night-mid: #0A1628;
-            --deep-blue: #0D1F3C;
-            --blue: #1A3A6B;
-            --blue-mid: #2256A8;
-            --sky: #4A90D9;
-            --sky-light: #7EC8F0;
-            --sky-pale: #B8E0F7;
-            --white: #EFF8FF;
+            --night: #010810;
+            --deep: #021428;
+            --blue: #1565C0;
+            --sky: #29B6F6;
+            --sky-light: #81D4FA;
+            --sky-pale: #E1F5FE;
+            --white: #F0FAFF;
             --gold: #F0C040;
-            --gold-light: #FFE080;
-            --text: #D0E8FF;
-            --text-light: #7AAFD4;
+            --text: #CEE9FF;
+            --text-light: #64B0D8;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Raleway', sans-serif;
-            background: linear-gradient(180deg, var(--night) 0%, var(--night-mid) 40%, var(--deep-blue) 70%, #1A3A6B 100%);
+            min-height: 100vh;
+            background: linear-gradient(170deg,
+                #010810 0%,
+                #021428 15%,
+                #062550 30%,
+                #0D47A1 50%,
+                #1976D2 65%,
+                #29B6F6 82%,
+                #81D4FA 100%
+            );
             background-attachment: fixed;
             color: var(--text);
-            min-height: 100vh;
         }
 
         /* NAVBAR */
         .navbar-saahel {
-            background: rgba(5,11,26,0.9);
+            background: rgba(1,8,16,0.88);
             backdrop-filter: blur(20px);
             padding: 0 2rem;
             height: 70px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            box-shadow: 0 4px 30px rgba(0,0,0,0.5);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            border-bottom: 1px solid rgba(74,144,217,0.3);
+            display: flex; align-items: center; justify-content: space-between;
+            box-shadow: 0 4px 30px rgba(0,0,0,0.6);
+            position: sticky; top: 0; z-index: 1000;
+            border-bottom: 1px solid rgba(41,182,246,0.4);
         }
 
         .navbar-brand-saahel {
-            font-family: 'Cinzel', serif;
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: var(--sky-light) !important;
-            text-decoration: none;
-            letter-spacing: 3px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            text-shadow: 0 0 20px rgba(126,200,240,0.6);
+            font-family: 'Cinzel', serif; font-size: 1.8rem; font-weight: 700;
+            color: var(--sky-light) !important; text-decoration: none;
+            letter-spacing: 3px; display: flex; align-items: center; gap: 10px;
+            text-shadow: 0 0 20px rgba(129,212,250,0.7);
             transition: all 0.3s ease;
         }
-
-        .navbar-brand-saahel:hover { color: var(--white) !important; text-shadow: 0 0 30px rgba(126,200,240,0.9); }
+        .navbar-brand-saahel:hover { color: var(--white) !important; text-shadow: 0 0 30px rgba(129,212,250,1); }
 
         .logo-icon {
             width: 38px; height: 38px;
-            background: linear-gradient(135deg, var(--sky), var(--blue-mid));
+            background: linear-gradient(135deg, var(--sky), var(--blue));
             border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 1.1rem;
-            box-shadow: 0 0 20px rgba(74,144,217,0.6);
+            display: flex; align-items: center; justify-content: center; font-size: 1.1rem;
+            box-shadow: 0 0 20px rgba(41,182,246,0.7);
             animation: logoGlow 3s ease-in-out infinite;
         }
-
         @keyframes logoGlow {
-            0%, 100% { box-shadow: 0 0 15px rgba(74,144,217,0.5); }
-            50% { box-shadow: 0 0 30px rgba(126,200,240,0.8); }
+            0%, 100% { box-shadow: 0 0 15px rgba(41,182,246,0.6); }
+            50% { box-shadow: 0 0 35px rgba(129,212,250,1), 0 0 60px rgba(41,182,246,0.4); }
         }
 
         .nav-links { display: flex; gap: 10px; align-items: center; }
+        .btn-nav { padding: 8px 18px; border-radius: 25px; font-family: 'Raleway', sans-serif; font-weight: 600; font-size: 0.85rem; text-decoration: none; transition: all 0.3s ease; border: none; cursor: pointer; }
 
-        .btn-nav {
-            padding: 8px 18px; border-radius: 25px;
-            font-family: 'Raleway', sans-serif; font-weight: 600;
-            font-size: 0.85rem; letter-spacing: 0.5px;
-            text-decoration: none; transition: all 0.3s ease;
-            border: none; cursor: pointer;
-        }
+        .btn-nav-dashboard { background: rgba(41,182,246,0.15); color: var(--sky-light); border: 1px solid rgba(41,182,246,0.5); }
+        .btn-nav-dashboard:hover { background: var(--sky); color: var(--night); }
 
-        .btn-nav-dashboard { background: rgba(74,144,217,0.15); color: var(--sky-light); border: 1px solid rgba(74,144,217,0.4); }
-        .btn-nav-dashboard:hover { background: var(--sky); color: white; }
-
-        .btn-nav-cat { background: rgba(126,200,240,0.1); color: var(--sky-pale); border: 1px solid rgba(126,200,240,0.3); }
+        .btn-nav-cat { background: rgba(129,212,250,0.1); color: var(--sky-pale); border: 1px solid rgba(129,212,250,0.4); }
         .btn-nav-cat:hover { background: var(--sky-light); color: var(--night); }
 
-        .btn-nav-add { background: linear-gradient(135deg, var(--blue-mid), var(--sky)); color: white; }
-        .btn-nav-add:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(34,86,168,0.6); color: white; }
+        .btn-nav-add { background: linear-gradient(135deg, var(--blue), var(--sky)); color: white; }
+        .btn-nav-add:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(41,182,246,0.6); color: white; }
 
-        .btn-nav-logout { background: rgba(240,192,64,0.1); color: var(--gold); border: 1px solid rgba(240,192,64,0.3); }
+        .btn-nav-logout { background: rgba(240,192,64,0.12); color: var(--gold); border: 1px solid rgba(240,192,64,0.4); }
         .btn-nav-logout:hover { background: var(--gold); color: var(--night); }
 
         /* CONTENU */
-        .main-content {
-            position: relative; z-index: 1;
-            padding: 2rem; max-width: 1400px;
-            margin: 0 auto; animation: fadeInUp 0.5s ease;
-        }
-
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        .main-content { position: relative; z-index: 1; padding: 2rem; max-width: 1400px; margin: 0 auto; animation: fadeInUp 0.5s ease; }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
         /* TITRE */
         .page-title {
             font-family: 'Cinzel', serif; font-size: 1.6rem;
             color: var(--sky-light); margin-bottom: 1.5rem;
             letter-spacing: 2px; display: flex; align-items: center; gap: 12px;
-            text-shadow: 0 0 15px rgba(126,200,240,0.4);
+            text-shadow: 0 0 15px rgba(129,212,250,0.5);
         }
-        .page-title::after {
-            content: ''; flex: 1; height: 1px;
-            background: linear-gradient(90deg, rgba(74,144,217,0.6), transparent);
-        }
+        .page-title::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, rgba(41,182,246,0.7), transparent); }
 
         /* CARTES */
         .card-saahel {
-            background: rgba(10,22,40,0.7);
+            background: rgba(1,8,16,0.65);
             backdrop-filter: blur(15px);
-            border: 1px solid rgba(74,144,217,0.2);
+            border: 1px solid rgba(41,182,246,0.25);
             border-radius: 16px;
-            box-shadow: 0 4px 30px rgba(0,0,0,0.3), inset 0 1px 0 rgba(74,144,217,0.1);
+            box-shadow: 0 4px 30px rgba(0,0,0,0.4), inset 0 1px 0 rgba(41,182,246,0.1);
             transition: all 0.3s ease; overflow: hidden;
         }
-        .card-saahel:hover { border-color: rgba(74,144,217,0.4); box-shadow: 0 8px 40px rgba(0,0,0,0.4); }
+        .card-saahel:hover { border-color: rgba(41,182,246,0.5); box-shadow: 0 8px 40px rgba(0,0,0,0.5), 0 0 20px rgba(41,182,246,0.1); }
 
         /* TABLEAU */
         .table-saahel { border-collapse: separate; border-spacing: 0; width: 100%; }
-        .table-saahel thead tr { background: linear-gradient(135deg, rgba(5,11,26,0.95), rgba(13,31,60,0.95)); }
-        .table-saahel thead th {
-            color: var(--sky-light); font-family: 'Cinzel', serif;
-            font-size: 0.78rem; letter-spacing: 2px; padding: 15px 20px;
-            font-weight: 600; border: none; border-bottom: 1px solid rgba(74,144,217,0.3);
-        }
-        .table-saahel tbody tr { background: rgba(10,22,40,0.4); transition: all 0.2s ease; border-bottom: 1px solid rgba(74,144,217,0.08); }
-        .table-saahel tbody tr:hover { background: rgba(34,86,168,0.15); }
+        .table-saahel thead tr { background: rgba(1,8,16,0.9); }
+        .table-saahel thead th { color: var(--sky-light); font-family: 'Cinzel', serif; font-size: 0.78rem; letter-spacing: 2px; padding: 15px 20px; font-weight: 600; border: none; border-bottom: 1px solid rgba(41,182,246,0.35); }
+        .table-saahel tbody tr { background: rgba(1,8,16,0.35); transition: all 0.2s ease; border-bottom: 1px solid rgba(41,182,246,0.08); }
+        .table-saahel tbody tr:hover { background: rgba(21,101,192,0.2); }
         .table-saahel tbody td { padding: 14px 20px; vertical-align: middle; border: none; color: var(--text); }
 
         /* BADGES */
-        .badge-ok { background: linear-gradient(135deg, #1A7A3A, #0D4D24); color: #7FE0A0; padding: 5px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; border: 1px solid rgba(127,224,160,0.3); }
-        .badge-low { background: linear-gradient(135deg, #7A1A1A, #4D0D0D); color: #FF9090; padding: 5px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; animation: pulse 2s infinite; }
-        @keyframes pulse {
-            0%, 100% { box-shadow: 0 0 0 0 rgba(255,100,100,0.4); }
-            50% { box-shadow: 0 0 0 6px rgba(255,100,100,0); }
-        }
+        .badge-ok { background: linear-gradient(135deg, #1B5E20, #0D3B13); color: #A5D6A7; padding: 5px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; border: 1px solid rgba(165,214,167,0.3); }
+        .badge-low { background: linear-gradient(135deg, #7A1A1A, #4D0D0D); color: #EF9A9A; padding: 5px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; animation: pulse 2s infinite; }
+        @keyframes pulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(239,154,154,0.4); } 50% { box-shadow: 0 0 0 6px rgba(239,154,154,0); } }
 
         /* BOUTONS */
-        .btn-saahel-primary { background: linear-gradient(135deg, var(--blue-mid), var(--sky)); color: white; border: none; padding: 10px 28px; border-radius: 25px; font-family: 'Raleway', sans-serif; font-weight: 600; letter-spacing: 1px; transition: all 0.3s ease; cursor: pointer; text-decoration: none; display: inline-block; }
-        .btn-saahel-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(34,86,168,0.5); color: white; }
+        .btn-saahel-primary { background: linear-gradient(135deg, var(--blue), var(--sky)); color: white; border: none; padding: 10px 28px; border-radius: 25px; font-family: 'Raleway', sans-serif; font-weight: 600; letter-spacing: 1px; transition: all 0.3s ease; cursor: pointer; text-decoration: none; display: inline-block; }
+        .btn-saahel-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(41,182,246,0.5); color: white; }
 
         .btn-saahel-warning { background: linear-gradient(135deg, var(--sky), var(--sky-light)); color: var(--night); border: none; padding: 7px 16px; border-radius: 20px; font-size: 0.82rem; font-weight: 600; transition: all 0.3s ease; text-decoration: none; display: inline-block; }
-        .btn-saahel-warning:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(74,144,217,0.5); color: var(--night); }
+        .btn-saahel-warning:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(41,182,246,0.5); color: var(--night); }
 
-        .btn-saahel-danger { background: linear-gradient(135deg, #7A1A1A, #4D0D0D); color: #FF9090; border: 1px solid rgba(255,100,100,0.3); padding: 7px 16px; border-radius: 20px; font-size: 0.82rem; font-weight: 600; transition: all 0.3s ease; text-decoration: none; display: inline-block; }
-        .btn-saahel-danger:hover { transform: translateY(-2px); color: #FFB0B0; }
+        .btn-saahel-danger { background: rgba(183,28,28,0.3); color: #EF9A9A; border: 1px solid rgba(239,154,154,0.3); padding: 7px 16px; border-radius: 20px; font-size: 0.82rem; font-weight: 600; transition: all 0.3s ease; text-decoration: none; display: inline-block; }
+        .btn-saahel-danger:hover { background: rgba(183,28,28,0.5); color: #FFCDD2; transform: translateY(-2px); }
 
-        .btn-saahel-secondary { background: rgba(74,144,217,0.1); color: var(--sky-light); border: 1px solid rgba(74,144,217,0.3); padding: 10px 24px; border-radius: 25px; font-family: 'Raleway', sans-serif; font-weight: 600; transition: all 0.3s ease; text-decoration: none; display: inline-block; }
-        .btn-saahel-secondary:hover { background: rgba(74,144,217,0.2); color: var(--white); }
+        .btn-saahel-secondary { background: rgba(41,182,246,0.1); color: var(--sky-light); border: 1px solid rgba(41,182,246,0.35); padding: 10px 24px; border-radius: 25px; font-family: 'Raleway', sans-serif; font-weight: 600; transition: all 0.3s ease; text-decoration: none; display: inline-block; }
+        .btn-saahel-secondary:hover { background: rgba(41,182,246,0.25); color: var(--white); }
 
-        .btn-saahel-outline { background: transparent; color: var(--sky-light); border: 1.5px solid rgba(74,144,217,0.4); padding: 6px 14px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; transition: all 0.3s ease; text-decoration: none; display: inline-block; }
-        .btn-saahel-outline:hover { background: var(--sky); color: white; border-color: var(--sky); }
+        .btn-saahel-outline { background: transparent; color: var(--sky-light); border: 1.5px solid rgba(41,182,246,0.45); padding: 6px 14px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; transition: all 0.3s ease; text-decoration: none; display: inline-block; }
+        .btn-saahel-outline:hover { background: var(--sky); color: var(--night); border-color: var(--sky); }
 
         /* FORMULAIRES */
         .form-saahel .form-label { font-weight: 600; color: var(--sky-light); letter-spacing: 0.5px; font-size: 0.9rem; }
-        .form-saahel .form-control, .form-saahel select {
-            border: 1.5px solid rgba(74,144,217,0.3); border-radius: 10px;
-            padding: 10px 15px; background: rgba(10,22,40,0.8); color: var(--text);
-            transition: all 0.3s ease; width: 100%;
-        }
-        .form-saahel .form-control:focus, .form-saahel select:focus {
-            border-color: var(--sky); box-shadow: 0 0 0 3px rgba(74,144,217,0.15);
-            background: rgba(13,31,60,0.9); outline: none; color: var(--white);
-        }
+        .form-saahel .form-control, .form-saahel select { border: 1.5px solid rgba(41,182,246,0.3); border-radius: 10px; padding: 10px 15px; background: rgba(1,8,16,0.8); color: var(--text); transition: all 0.3s ease; width: 100%; }
+        .form-saahel .form-control:focus, .form-saahel select:focus { border-color: var(--sky); box-shadow: 0 0 0 3px rgba(41,182,246,0.2); background: rgba(6,37,80,0.9); outline: none; color: var(--white); }
 
         /* ALERTES */
-        .alert-saahel-success { background: rgba(13,60,26,0.5); border: 1px solid rgba(127,224,160,0.3); border-left: 4px solid #7FE0A0; border-radius: 10px; padding: 12px 18px; color: #7FE0A0; margin-bottom: 1rem; animation: slideIn 0.3s ease; }
-        .alert-saahel-danger { background: rgba(60,13,13,0.5); border: 1px solid rgba(255,144,144,0.3); border-left: 4px solid #FF9090; border-radius: 10px; padding: 12px 18px; color: #FF9090; margin-bottom: 1rem; animation: slideIn 0.3s ease; }
+        .alert-saahel-success { background: rgba(13,60,26,0.5); border: 1px solid rgba(165,214,167,0.3); border-left: 4px solid #A5D6A7; border-radius: 10px; padding: 12px 18px; color: #A5D6A7; margin-bottom: 1rem; animation: slideIn 0.3s ease; }
+        .alert-saahel-danger { background: rgba(60,13,13,0.5); border: 1px solid rgba(239,154,154,0.3); border-left: 4px solid #EF9A9A; border-radius: 10px; padding: 12px 18px; color: #EF9A9A; margin-bottom: 1rem; animation: slideIn 0.3s ease; }
         @keyframes slideIn { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: translateX(0); } }
 
         /* IMAGES */
-        .product-img { width: 55px; height: 55px; object-fit: cover; border-radius: 10px; border: 2px solid rgba(74,144,217,0.3); box-shadow: 0 2px 10px rgba(0,0,0,0.3); }
-        .qr-img { width: 55px; height: 55px; border-radius: 8px; border: 2px solid rgba(74,144,217,0.3); }
+        .product-img { width: 55px; height: 55px; object-fit: cover; border-radius: 10px; border: 2px solid rgba(41,182,246,0.35); box-shadow: 0 2px 10px rgba(0,0,0,0.4); }
+        .qr-img { width: 55px; height: 55px; border-radius: 8px; border: 2px solid rgba(41,182,246,0.35); }
     </style>
 </head>
 <body>
