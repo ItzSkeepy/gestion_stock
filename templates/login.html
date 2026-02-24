@@ -3,41 +3,278 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Connexion Admin</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Saahel — Connexion</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Raleway:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --sand: #E8D5A3;
+            --sand-light: #F5ECD7;
+            --ocre: #C17F3A;
+            --terracotta: #C0613A;
+            --brown: #6B3A2A;
+            --gold: #D4A843;
+            --gold-light: #F0C870;
+            --dark: #2C1A0E;
+            --dark-mid: #3D2410;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Raleway', sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--dark) 0%, var(--dark-mid) 40%, #5C3020 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        /* Dunes animées */
+        .dunes {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 200px;
+            z-index: 0;
+        }
+
+        .dune {
+            position: absolute;
+            bottom: 0;
+            border-radius: 50%;
+        }
+
+        .dune1 {
+            width: 120%; left: -10%;
+            height: 120px;
+            background: rgba(196,168,130,0.08);
+            animation: dune-sway 8s ease-in-out infinite;
+        }
+
+        .dune2 {
+            width: 100%; left: 0;
+            height: 80px;
+            background: rgba(193,127,58,0.06);
+            animation: dune-sway 12s ease-in-out infinite reverse;
+        }
+
+        @keyframes dune-sway {
+            0%, 100% { transform: scaleX(1) translateY(0); }
+            50% { transform: scaleX(1.02) translateY(-5px); }
+        }
+
+        /* Étoiles */
+        .stars {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle var(--duration) ease-in-out infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.3); }
+        }
+
+        /* CARTE LOGIN */
+        .login-container {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            max-width: 420px;
+            padding: 20px;
+            animation: fadeInUp 0.6s ease;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .login-card {
+            background: rgba(245,236,215,0.07);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(212,168,67,0.25);
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4), inset 0 1px 0 rgba(212,168,67,0.1);
+        }
+
+        .logo-section {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .logo-circle {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, var(--gold), var(--ocre));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin: 0 auto 15px;
+            box-shadow: 0 0 30px rgba(212,168,67,0.4);
+            animation: glow 3s ease-in-out infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(212,168,67,0.4); }
+            50% { box-shadow: 0 0 40px rgba(212,168,67,0.7); }
+        }
+
+        .brand-name {
+            font-family: 'Cinzel', serif;
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--gold);
+            letter-spacing: 6px;
+            text-shadow: 0 0 20px rgba(212,168,67,0.5);
+        }
+
+        .brand-subtitle {
+            color: rgba(232,213,163,0.5);
+            font-size: 0.75rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-top: 5px;
+        }
+
+        .form-group { margin-bottom: 20px; }
+
+        .form-label {
+            display: block;
+            color: rgba(232,213,163,0.7);
+            font-size: 0.82rem;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 18px;
+            background: rgba(255,255,255,0.06);
+            border: 1.5px solid rgba(212,168,67,0.2);
+            border-radius: 12px;
+            color: var(--sand);
+            font-family: 'Raleway', sans-serif;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        .form-input::placeholder { color: rgba(232,213,163,0.3); }
+
+        .form-input:focus {
+            border-color: var(--gold);
+            background: rgba(212,168,67,0.08);
+            box-shadow: 0 0 0 3px rgba(212,168,67,0.1);
+        }
+
+        .btn-login {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, var(--gold), var(--ocre));
+            color: var(--dark);
+            border: none;
+            border-radius: 12px;
+            font-family: 'Cinzel', serif;
+            font-size: 1rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(212,168,67,0.4);
+        }
+
+        .btn-login:active { transform: translateY(0); }
+
+        .alert-danger {
+            background: rgba(192,97,58,0.15);
+            border: 1px solid rgba(192,97,58,0.3);
+            border-left: 3px solid var(--terracotta);
+            border-radius: 10px;
+            padding: 10px 15px;
+            color: #FFB49A;
+            font-size: 0.87rem;
+            margin-bottom: 20px;
+        }
+    </style>
 </head>
-<body class="bg-dark">
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-4">
-            <div class="card shadow-lg">
-                <div class="card-body p-4">
-                    <h3 class="text-center mb-4">🔐 Connexion Admin</h3>
-                    <h6 class="text-center text-muted mb-4">📦 Gestion de Stock</h6>
+<body>
 
-                    {% with messages = get_flashed_messages(with_categories=true) %}
-                        {% if messages %}
-                            {% for category, message in messages %}
-                                <div class="alert alert-{{ category }}">{{ message }}</div>
-                            {% endfor %}
-                        {% endif %}
-                    {% endwith %}
+    <!-- Étoiles -->
+    <div class="stars" id="stars"></div>
 
-                    <form method="POST">
-                        <div class="mb-3">
-                            <label class="form-label">Nom d'utilisateur</label>
-                            <input type="text" name="username" class="form-control" required autofocus>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Mot de passe</label>
-                            <input type="password" name="password" class="form-control" required>
-                        </div>
-                        <button type="submit" class="btn btn-dark w-100">Se connecter</button>
-                    </form>
-                </div>
+    <!-- Dunes -->
+    <div class="dunes">
+        <div class="dune dune1"></div>
+        <div class="dune dune2"></div>
+    </div>
+
+    <div class="login-container">
+        <div class="login-card">
+            <div class="logo-section">
+                <div class="logo-circle">🏜️</div>
+                <div class="brand-name">SAAHEL</div>
+                <div class="brand-subtitle">Gestion de Stock</div>
             </div>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert-danger">⚠️ {{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <form method="POST">
+                <div class="form-group">
+                    <label class="form-label">Identifiant</label>
+                    <input type="text" name="username" class="form-input" placeholder="admin" required autofocus>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Mot de passe</label>
+                    <input type="password" name="password" class="form-input" placeholder="••••••••" required>
+                </div>
+                <button type="submit" class="btn-login">ENTRER</button>
+            </form>
         </div>
     </div>
-</div>
+
+    <script>
+        // Génération des étoiles
+        const starsContainer = document.getElementById('stars');
+        for (let i = 0; i < 80; i++) {
+            const star = document.createElement('div');
+            star.classList.add('star');
+            const size = Math.random() * 2.5 + 0.5;
+            star.style.cssText = `
+                width: ${size}px;
+                height: ${size}px;
+                top: ${Math.random() * 70}%;
+                left: ${Math.random() * 100}%;
+                --duration: ${Math.random() * 3 + 2}s;
+                animation-delay: ${Math.random() * 3}s;
+            `;
+            starsContainer.appendChild(star);
+        }
+    </script>
 </body>
 </html>
