@@ -2,7 +2,7 @@
 {% block content %}
 <h2 class="page-title">📊 Tableau de bord</h2>
 
-<div style="display:flex;gap:10px;margin-bottom:1.5rem;">
+<div style="display:flex;gap:10px;margin-bottom:1.5rem;flex-wrap:wrap;">
     <a href="/export/stock" class="btn-saahel-primary">📥 Exporter Stock Excel</a>
     <a href="/export/ventes" class="btn-saahel-primary">📥 Exporter Ventes Excel</a>
 </div>
@@ -10,42 +10,42 @@
 <!-- Cartes statistiques -->
 <div class="row mb-4 g-3">
     <div class="col-md-3">
-        <div class="card-saahel p-3 text-center" style="border-top: 3px solid var(--ocre);">
+        <div class="card-saahel p-3 text-center" style="border-top:3px solid #4A90D9;">
             <div style="font-size:2rem;">📦</div>
-            <div style="font-family:'Cinzel',serif;font-size:2rem;font-weight:700;color:var(--ocre);">{{ total_articles }}</div>
-            <div style="color:var(--text-light);font-size:0.85rem;letter-spacing:1px;">ARTICLES</div>
+            <div style="font-family:'Cinzel',serif;font-size:2rem;font-weight:700;color:#7EC8F0;">{{ total_articles }}</div>
+            <div style="color:#7AAFD4;font-size:0.85rem;letter-spacing:1px;">ARTICLES</div>
         </div>
     </div>
     <div class="col-md-3">
-        <div class="card-saahel p-3 text-center" style="border-top: 3px solid #4CAF50;">
+        <div class="card-saahel p-3 text-center" style="border-top:3px solid #7FE0A0;">
             <div style="font-size:2rem;">🛒</div>
-            <div style="font-family:'Cinzel',serif;font-size:2rem;font-weight:700;color:#4CAF50;">{{ total_ventes }}</div>
-            <div style="color:var(--text-light);font-size:0.85rem;letter-spacing:1px;">VENTES</div>
+            <div style="font-family:'Cinzel',serif;font-size:2rem;font-weight:700;color:#7FE0A0;">{{ total_ventes }}</div>
+            <div style="color:#7AAFD4;font-size:0.85rem;letter-spacing:1px;">VENTES</div>
         </div>
     </div>
     <div class="col-md-3">
-        <div class="card-saahel p-3 text-center" style="border-top: 3px solid var(--gold);">
+        <div class="card-saahel p-3 text-center" style="border-top:3px solid #F0C040;">
             <div style="font-size:2rem;">📤</div>
-            <div style="font-family:'Cinzel',serif;font-size:2rem;font-weight:700;color:var(--gold);">{{ total_quantite }}</div>
-            <div style="color:var(--text-light);font-size:0.85rem;letter-spacing:1px;">ARTICLES VENDUS</div>
+            <div style="font-family:'Cinzel',serif;font-size:2rem;font-weight:700;color:#F0C040;">{{ total_quantite }}</div>
+            <div style="color:#7AAFD4;font-size:0.85rem;letter-spacing:1px;">ARTICLES VENDUS</div>
         </div>
     </div>
     <div class="col-md-3">
-        <div class="card-saahel p-3 text-center" style="border-top: 3px solid var(--terracotta);">
+        <div class="card-saahel p-3 text-center" style="border-top:3px solid #B8E0F7;">
             <div style="font-size:2rem;">💰</div>
-            <div style="font-family:'Cinzel',serif;font-size:1.4rem;font-weight:700;color:var(--terracotta);">{{ "%.0f"|format(chiffre_affaires) }}</div>
-            <div style="color:var(--text-light);font-size:0.85rem;letter-spacing:1px;">FCFA CA TOTAL</div>
+            <div style="font-family:'Cinzel',serif;font-size:1.4rem;font-weight:700;color:#B8E0F7;">{{ "%.0f"|format(chiffre_affaires) }}</div>
+            <div style="color:#7AAFD4;font-size:0.85rem;letter-spacing:1px;">FCFA CA TOTAL</div>
         </div>
     </div>
 </div>
 
 <!-- Alerte stock bas -->
 {% if stock_bas %}
-<div style="background:rgba(192,97,58,0.08);border:1px solid rgba(192,97,58,0.3);border-left:4px solid var(--terracotta);border-radius:12px;padding:15px 20px;margin-bottom:1.5rem;">
-    <div style="font-weight:700;color:var(--terracotta);margin-bottom:8px;">⚠️ Stock bas — Articles à réapprovisionner</div>
+<div style="background:rgba(60,13,13,0.4);border:1px solid rgba(255,100,100,0.3);border-left:4px solid #FF9090;border-radius:12px;padding:15px 20px;margin-bottom:1.5rem;">
+    <div style="font-weight:700;color:#FF9090;margin-bottom:8px;">⚠️ Stock bas — Articles à réapprovisionner</div>
     <div style="display:flex;flex-wrap:wrap;gap:8px;">
         {% for article in stock_bas %}
-            <span style="background:var(--terracotta);color:white;padding:4px 12px;border-radius:20px;font-size:0.82rem;font-weight:600;">
+            <span style="background:rgba(255,100,100,0.15);color:#FF9090;padding:4px 12px;border-radius:20px;font-size:0.82rem;font-weight:600;border:1px solid rgba(255,100,100,0.3);">
                 {{ article[1] }} — {{ article[4] }} restant(s)
             </span>
         {% endfor %}
@@ -54,17 +54,16 @@
 {% endif %}
 
 <div class="row g-4">
-    <!-- Top articles -->
     {% if top_articles %}
     <div class="col-md-4">
-        <div class="card-saahel" style="border-top:3px solid var(--gold);">
-            <div style="padding:15px 20px;border-bottom:1px solid rgba(196,168,130,0.2);">
-                <span style="font-family:'Cinzel',serif;font-size:0.9rem;letter-spacing:2px;color:var(--brown);">🏆 TOP ARTICLES</span>
+        <div class="card-saahel" style="border-top:3px solid #F0C040;">
+            <div style="padding:15px 20px;border-bottom:1px solid rgba(74,144,217,0.2);">
+                <span style="font-family:'Cinzel',serif;font-size:0.9rem;letter-spacing:2px;color:#F0C040;">🏆 TOP ARTICLES</span>
             </div>
             <div style="padding:15px;">
                 {% for article in top_articles %}
-                <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid rgba(196,168,130,0.15);">
-                    <span style="font-weight:600;font-size:0.9rem;">{{ article[0] }}</span>
+                <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid rgba(74,144,217,0.1);">
+                    <span style="font-weight:600;font-size:0.9rem;color:#EFF8FF;">{{ article[0] }}</span>
                     <span class="badge-ok">{{ article[1] }} vendus</span>
                 </div>
                 {% endfor %}
@@ -73,42 +72,36 @@
     </div>
     {% endif %}
 
-    <!-- Historique -->
     <div class="col-md-{% if top_articles %}8{% else %}12{% endif %}">
-        <div class="card-saahel" style="border-top:3px solid var(--ocre);">
-            <div style="padding:15px 20px;border-bottom:1px solid rgba(196,168,130,0.2);">
-                <span style="font-family:'Cinzel',serif;font-size:0.9rem;letter-spacing:2px;color:var(--brown);">🕒 HISTORIQUE DES VENTES</span>
+        <div class="card-saahel" style="border-top:3px solid #4A90D9;">
+            <div style="padding:15px 20px;border-bottom:1px solid rgba(74,144,217,0.2);">
+                <span style="font-family:'Cinzel',serif;font-size:0.9rem;letter-spacing:2px;color:#7EC8F0;">🕒 HISTORIQUE DES VENTES</span>
             </div>
             {% if historique %}
             <div style="overflow-x:auto;">
                 <table class="table-saahel">
                     <thead>
                         <tr>
-                            <th>#</th>
-                            <th>ARTICLE</th>
-                            <th>QTÉ</th>
-                            <th>PRIX UNIT.</th>
-                            <th>TOTAL</th>
-                            <th>DATE</th>
+                            <th>#</th><th>ARTICLE</th><th>QTÉ</th><th>PRIX UNIT.</th><th>TOTAL</th><th>DATE</th>
                         </tr>
                     </thead>
                     <tbody>
                         {% for vente in historique %}
                         <tr>
-                            <td style="color:var(--text-light);font-size:0.85rem;">{{ vente[0] }}</td>
-                            <td style="font-weight:600;">{{ vente[1] }}</td>
+                            <td style="color:#7AAFD4;font-size:0.85rem;">{{ vente[0] }}</td>
+                            <td style="font-weight:600;color:#EFF8FF;">{{ vente[1] }}</td>
                             <td><span class="badge-ok">{{ vente[2] }}</span></td>
-                            <td style="color:var(--ocre);">{{ vente[3] }} FCFA</td>
-                            <td style="font-weight:700;color:var(--brown);">{{ "%.0f"|format(vente[4]) }} FCFA</td>
-                            <td style="color:var(--text-light);font-size:0.85rem;">{{ vente[5].strftime('%d/%m/%Y %H:%M') }}</td>
+                            <td style="color:#7EC8F0;">{{ vente[3] }} FCFA</td>
+                            <td style="font-weight:700;color:#B8E0F7;">{{ "%.0f"|format(vente[4]) }} FCFA</td>
+                            <td style="color:#7AAFD4;font-size:0.85rem;">{{ vente[5].strftime('%d/%m/%Y %H:%M') }}</td>
                         </tr>
                         {% endfor %}
                     </tbody>
                 </table>
             </div>
             {% else %}
-            <div style="padding:40px;text-align:center;color:var(--text-light);">
-                <div style="font-size:3rem;margin-bottom:10px;">🏜️</div>
+            <div style="padding:40px;text-align:center;color:#7AAFD4;">
+                <div style="font-size:3rem;margin-bottom:10px;">🌙</div>
                 <p>Aucune vente enregistrée pour le moment.</p>
             </div>
             {% endif %}

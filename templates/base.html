@@ -8,121 +8,105 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         :root {
-            --sand: #E8D5A3;
-            --sand-light: #F5ECD7;
-            --sand-dark: #C4A882;
-            --ocre: #C17F3A;
-            --terracotta: #C0613A;
-            --brown: #6B3A2A;
-            --gold: #D4A843;
-            --gold-light: #F0C870;
-            --dark: #2C1A0E;
-            --dark-mid: #3D2410;
-            --text: #3D2410;
-            --text-light: #7A5C3E;
+            --night: #050B1A;
+            --night-mid: #0A1628;
+            --deep-blue: #0D1F3C;
+            --blue: #1A3A6B;
+            --blue-mid: #2256A8;
+            --sky: #4A90D9;
+            --sky-light: #7EC8F0;
+            --sky-pale: #B8E0F7;
+            --white: #EFF8FF;
+            --gold: #F0C040;
+            --gold-light: #FFE080;
+            --text: #D0E8FF;
+            --text-light: #7AAFD4;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Raleway', sans-serif;
-            background-color: var(--sand-light);
+            background: linear-gradient(180deg, var(--night) 0%, var(--night-mid) 40%, var(--deep-blue) 70%, #1A3A6B 100%);
+            background-attachment: fixed;
             color: var(--text);
             min-height: 100vh;
-            background-image: 
-                radial-gradient(ellipse at 20% 0%, rgba(193,127,58,0.15) 0%, transparent 50%),
-                radial-gradient(ellipse at 80% 100%, rgba(192,97,58,0.1) 0%, transparent 50%);
         }
 
         /* NAVBAR */
         .navbar-saahel {
-            background: linear-gradient(135deg, var(--dark) 0%, var(--dark-mid) 50%, var(--brown) 100%);
+            background: rgba(5,11,26,0.9);
+            backdrop-filter: blur(20px);
             padding: 0 2rem;
             height: 70px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            box-shadow: 0 4px 20px rgba(44,26,14,0.4);
+            box-shadow: 0 4px 30px rgba(0,0,0,0.5);
             position: sticky;
             top: 0;
             z-index: 1000;
-            border-bottom: 2px solid var(--gold);
+            border-bottom: 1px solid rgba(74,144,217,0.3);
         }
 
         .navbar-brand-saahel {
             font-family: 'Cinzel', serif;
             font-size: 1.8rem;
             font-weight: 700;
-            color: var(--gold) !important;
+            color: var(--sky-light) !important;
             text-decoration: none;
             letter-spacing: 3px;
             display: flex;
             align-items: center;
             gap: 10px;
-            text-shadow: 0 0 20px rgba(212,168,67,0.5);
+            text-shadow: 0 0 20px rgba(126,200,240,0.6);
             transition: all 0.3s ease;
         }
 
-        .navbar-brand-saahel:hover {
-            color: var(--gold-light) !important;
-            text-shadow: 0 0 30px rgba(212,168,67,0.8);
-        }
+        .navbar-brand-saahel:hover { color: var(--white) !important; text-shadow: 0 0 30px rgba(126,200,240,0.9); }
 
         .logo-icon {
-            width: 38px;
-            height: 38px;
-            background: linear-gradient(135deg, var(--gold), var(--ocre));
+            width: 38px; height: 38px;
+            background: linear-gradient(135deg, var(--sky), var(--blue-mid));
             border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            display: flex; align-items: center; justify-content: center;
             font-size: 1.1rem;
-            box-shadow: 0 0 15px rgba(212,168,67,0.4);
+            box-shadow: 0 0 20px rgba(74,144,217,0.6);
+            animation: logoGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes logoGlow {
+            0%, 100% { box-shadow: 0 0 15px rgba(74,144,217,0.5); }
+            50% { box-shadow: 0 0 30px rgba(126,200,240,0.8); }
         }
 
         .nav-links { display: flex; gap: 10px; align-items: center; }
 
         .btn-nav {
-            padding: 8px 18px;
-            border-radius: 25px;
-            font-family: 'Raleway', sans-serif;
-            font-weight: 600;
-            font-size: 0.85rem;
-            letter-spacing: 0.5px;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            border: none;
-            cursor: pointer;
+            padding: 8px 18px; border-radius: 25px;
+            font-family: 'Raleway', sans-serif; font-weight: 600;
+            font-size: 0.85rem; letter-spacing: 0.5px;
+            text-decoration: none; transition: all 0.3s ease;
+            border: none; cursor: pointer;
         }
 
-        .btn-nav-dashboard {
-            background: rgba(212,168,67,0.15);
-            color: var(--gold);
-            border: 1px solid rgba(212,168,67,0.4);
-        }
-        .btn-nav-dashboard:hover { background: var(--gold); color: var(--dark); }
+        .btn-nav-dashboard { background: rgba(74,144,217,0.15); color: var(--sky-light); border: 1px solid rgba(74,144,217,0.4); }
+        .btn-nav-dashboard:hover { background: var(--sky); color: white; }
 
-        .btn-nav-add {
-            background: linear-gradient(135deg, var(--ocre), var(--terracotta));
-            color: white;
-        }
-        .btn-nav-add:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(193,127,58,0.5); color: white; }
+        .btn-nav-cat { background: rgba(126,200,240,0.1); color: var(--sky-pale); border: 1px solid rgba(126,200,240,0.3); }
+        .btn-nav-cat:hover { background: var(--sky-light); color: var(--night); }
 
-        .btn-nav-logout {
-            background: rgba(192,97,58,0.15);
-            color: var(--terracotta);
-            border: 1px solid rgba(192,97,58,0.4);
-        }
-        .btn-nav-logout:hover { background: var(--terracotta); color: white; }
+        .btn-nav-add { background: linear-gradient(135deg, var(--blue-mid), var(--sky)); color: white; }
+        .btn-nav-add:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(34,86,168,0.6); color: white; }
+
+        .btn-nav-logout { background: rgba(240,192,64,0.1); color: var(--gold); border: 1px solid rgba(240,192,64,0.3); }
+        .btn-nav-logout:hover { background: var(--gold); color: var(--night); }
 
         /* CONTENU */
         .main-content {
-            position: relative;
-            z-index: 1;
-            padding: 2rem;
-            max-width: 1400px;
-            margin: 0 auto;
-            animation: fadeInUp 0.5s ease;
+            position: relative; z-index: 1;
+            padding: 2rem; max-width: 1400px;
+            margin: 0 auto; animation: fadeInUp 0.5s ease;
         }
 
         @keyframes fadeInUp {
@@ -132,155 +116,94 @@
 
         /* TITRE */
         .page-title {
-            font-family: 'Cinzel', serif;
-            font-size: 1.6rem;
-            color: var(--brown);
-            margin-bottom: 1.5rem;
-            letter-spacing: 2px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
+            font-family: 'Cinzel', serif; font-size: 1.6rem;
+            color: var(--sky-light); margin-bottom: 1.5rem;
+            letter-spacing: 2px; display: flex; align-items: center; gap: 12px;
+            text-shadow: 0 0 15px rgba(126,200,240,0.4);
         }
         .page-title::after {
-            content: '';
-            flex: 1;
-            height: 2px;
-            background: linear-gradient(90deg, var(--gold), transparent);
-            border-radius: 2px;
+            content: ''; flex: 1; height: 1px;
+            background: linear-gradient(90deg, rgba(74,144,217,0.6), transparent);
         }
 
         /* CARTES */
         .card-saahel {
-            background: rgba(255,255,255,0.75);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(196,168,130,0.4);
+            background: rgba(10,22,40,0.7);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(74,144,217,0.2);
             border-radius: 16px;
-            box-shadow: 0 4px 20px rgba(44,26,14,0.08);
-            transition: all 0.3s ease;
-            overflow: hidden;
+            box-shadow: 0 4px 30px rgba(0,0,0,0.3), inset 0 1px 0 rgba(74,144,217,0.1);
+            transition: all 0.3s ease; overflow: hidden;
         }
-        .card-saahel:hover { transform: translateY(-3px); box-shadow: 0 8px 30px rgba(44,26,14,0.15); }
+        .card-saahel:hover { border-color: rgba(74,144,217,0.4); box-shadow: 0 8px 40px rgba(0,0,0,0.4); }
 
         /* TABLEAU */
         .table-saahel { border-collapse: separate; border-spacing: 0; width: 100%; }
-        .table-saahel thead tr { background: linear-gradient(135deg, var(--dark), var(--brown)); }
+        .table-saahel thead tr { background: linear-gradient(135deg, rgba(5,11,26,0.95), rgba(13,31,60,0.95)); }
         .table-saahel thead th {
-            color: var(--gold);
-            font-family: 'Cinzel', serif;
-            font-size: 0.78rem;
-            letter-spacing: 2px;
-            padding: 15px 20px;
-            font-weight: 600;
-            border: none;
+            color: var(--sky-light); font-family: 'Cinzel', serif;
+            font-size: 0.78rem; letter-spacing: 2px; padding: 15px 20px;
+            font-weight: 600; border: none; border-bottom: 1px solid rgba(74,144,217,0.3);
         }
-        .table-saahel tbody tr {
-            background: rgba(255,255,255,0.5);
-            transition: all 0.2s ease;
-            border-bottom: 1px solid rgba(196,168,130,0.2);
-        }
-        .table-saahel tbody tr:hover { background: rgba(212,168,67,0.08); }
+        .table-saahel tbody tr { background: rgba(10,22,40,0.4); transition: all 0.2s ease; border-bottom: 1px solid rgba(74,144,217,0.08); }
+        .table-saahel tbody tr:hover { background: rgba(34,86,168,0.15); }
         .table-saahel tbody td { padding: 14px 20px; vertical-align: middle; border: none; color: var(--text); }
 
         /* BADGES */
-        .badge-ok {
-            background: linear-gradient(135deg, #4CAF50, #2E7D32);
-            color: white; padding: 5px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600;
-        }
-        .badge-low {
-            background: linear-gradient(135deg, var(--terracotta), #8B2500);
-            color: white; padding: 5px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600;
-            animation: pulse 2s infinite;
-        }
+        .badge-ok { background: linear-gradient(135deg, #1A7A3A, #0D4D24); color: #7FE0A0; padding: 5px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; border: 1px solid rgba(127,224,160,0.3); }
+        .badge-low { background: linear-gradient(135deg, #7A1A1A, #4D0D0D); color: #FF9090; padding: 5px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; animation: pulse 2s infinite; }
         @keyframes pulse {
-            0%, 100% { box-shadow: 0 0 0 0 rgba(192,97,58,0.4); }
-            50% { box-shadow: 0 0 0 6px rgba(192,97,58,0); }
+            0%, 100% { box-shadow: 0 0 0 0 rgba(255,100,100,0.4); }
+            50% { box-shadow: 0 0 0 6px rgba(255,100,100,0); }
         }
 
         /* BOUTONS */
-        .btn-saahel-primary {
-            background: linear-gradient(135deg, var(--ocre), var(--terracotta));
-            color: white; border: none; padding: 10px 28px; border-radius: 25px;
-            font-family: 'Raleway', sans-serif; font-weight: 600; letter-spacing: 1px;
-            transition: all 0.3s ease; cursor: pointer; text-decoration: none; display: inline-block;
-        }
-        .btn-saahel-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(193,127,58,0.5); color: white; }
+        .btn-saahel-primary { background: linear-gradient(135deg, var(--blue-mid), var(--sky)); color: white; border: none; padding: 10px 28px; border-radius: 25px; font-family: 'Raleway', sans-serif; font-weight: 600; letter-spacing: 1px; transition: all 0.3s ease; cursor: pointer; text-decoration: none; display: inline-block; }
+        .btn-saahel-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(34,86,168,0.5); color: white; }
 
-        .btn-saahel-warning {
-            background: linear-gradient(135deg, var(--gold), var(--ocre));
-            color: white; border: none; padding: 7px 16px; border-radius: 20px;
-            font-size: 0.82rem; font-weight: 600; transition: all 0.3s ease; text-decoration: none; display: inline-block;
-        }
-        .btn-saahel-warning:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(212,168,67,0.5); color: white; }
+        .btn-saahel-warning { background: linear-gradient(135deg, var(--sky), var(--sky-light)); color: var(--night); border: none; padding: 7px 16px; border-radius: 20px; font-size: 0.82rem; font-weight: 600; transition: all 0.3s ease; text-decoration: none; display: inline-block; }
+        .btn-saahel-warning:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(74,144,217,0.5); color: var(--night); }
 
-        .btn-saahel-danger {
-            background: linear-gradient(135deg, var(--terracotta), #8B2500);
-            color: white; border: none; padding: 7px 16px; border-radius: 20px;
-            font-size: 0.82rem; font-weight: 600; transition: all 0.3s ease; text-decoration: none; display: inline-block;
-        }
-        .btn-saahel-danger:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(192,97,58,0.5); color: white; }
+        .btn-saahel-danger { background: linear-gradient(135deg, #7A1A1A, #4D0D0D); color: #FF9090; border: 1px solid rgba(255,100,100,0.3); padding: 7px 16px; border-radius: 20px; font-size: 0.82rem; font-weight: 600; transition: all 0.3s ease; text-decoration: none; display: inline-block; }
+        .btn-saahel-danger:hover { transform: translateY(-2px); color: #FFB0B0; }
 
-        .btn-saahel-secondary {
-            background: rgba(107,58,42,0.1); color: var(--brown); border: 1px solid rgba(107,58,42,0.3);
-            padding: 10px 24px; border-radius: 25px; font-family: 'Raleway', sans-serif;
-            font-weight: 600; transition: all 0.3s ease; text-decoration: none; display: inline-block;
-        }
-        .btn-saahel-secondary:hover { background: var(--brown); color: var(--sand-light); }
+        .btn-saahel-secondary { background: rgba(74,144,217,0.1); color: var(--sky-light); border: 1px solid rgba(74,144,217,0.3); padding: 10px 24px; border-radius: 25px; font-family: 'Raleway', sans-serif; font-weight: 600; transition: all 0.3s ease; text-decoration: none; display: inline-block; }
+        .btn-saahel-secondary:hover { background: rgba(74,144,217,0.2); color: var(--white); }
 
-        .btn-saahel-outline {
-            background: transparent; color: var(--ocre); border: 1.5px solid var(--ocre);
-            padding: 6px 14px; border-radius: 20px; font-size: 0.8rem; font-weight: 600;
-            transition: all 0.3s ease; text-decoration: none; display: inline-block;
-        }
-        .btn-saahel-outline:hover { background: var(--ocre); color: white; }
+        .btn-saahel-outline { background: transparent; color: var(--sky-light); border: 1.5px solid rgba(74,144,217,0.4); padding: 6px 14px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; transition: all 0.3s ease; text-decoration: none; display: inline-block; }
+        .btn-saahel-outline:hover { background: var(--sky); color: white; border-color: var(--sky); }
 
         /* FORMULAIRES */
-        .form-saahel .form-label { font-weight: 600; color: var(--brown); letter-spacing: 0.5px; font-size: 0.9rem; }
-        .form-saahel .form-control {
-            border: 1.5px solid rgba(196,168,130,0.5); border-radius: 10px;
-            padding: 10px 15px; background: rgba(255,255,255,0.8); color: var(--text); transition: all 0.3s ease;
+        .form-saahel .form-label { font-weight: 600; color: var(--sky-light); letter-spacing: 0.5px; font-size: 0.9rem; }
+        .form-saahel .form-control, .form-saahel select {
+            border: 1.5px solid rgba(74,144,217,0.3); border-radius: 10px;
+            padding: 10px 15px; background: rgba(10,22,40,0.8); color: var(--text);
+            transition: all 0.3s ease; width: 100%;
         }
-        .form-saahel .form-control:focus { border-color: var(--ocre); box-shadow: 0 0 0 3px rgba(193,127,58,0.15); background: white; outline: none; }
+        .form-saahel .form-control:focus, .form-saahel select:focus {
+            border-color: var(--sky); box-shadow: 0 0 0 3px rgba(74,144,217,0.15);
+            background: rgba(13,31,60,0.9); outline: none; color: var(--white);
+        }
 
         /* ALERTES */
-        .alert-saahel-success {
-            background: linear-gradient(135deg, rgba(76,175,80,0.1), rgba(46,125,50,0.05));
-            border: 1px solid rgba(76,175,80,0.3); border-left: 4px solid #4CAF50;
-            border-radius: 10px; padding: 12px 18px; color: #2E7D32; margin-bottom: 1rem;
-            animation: slideIn 0.3s ease;
-        }
-        .alert-saahel-danger {
-            background: linear-gradient(135deg, rgba(192,97,58,0.1), rgba(139,37,0,0.05));
-            border: 1px solid rgba(192,97,58,0.3); border-left: 4px solid var(--terracotta);
-            border-radius: 10px; padding: 12px 18px; color: var(--terracotta); margin-bottom: 1rem;
-            animation: slideIn 0.3s ease;
-        }
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateX(-10px); }
-            to { opacity: 1; transform: translateX(0); }
-        }
+        .alert-saahel-success { background: rgba(13,60,26,0.5); border: 1px solid rgba(127,224,160,0.3); border-left: 4px solid #7FE0A0; border-radius: 10px; padding: 12px 18px; color: #7FE0A0; margin-bottom: 1rem; animation: slideIn 0.3s ease; }
+        .alert-saahel-danger { background: rgba(60,13,13,0.5); border: 1px solid rgba(255,144,144,0.3); border-left: 4px solid #FF9090; border-radius: 10px; padding: 12px 18px; color: #FF9090; margin-bottom: 1rem; animation: slideIn 0.3s ease; }
+        @keyframes slideIn { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: translateX(0); } }
 
         /* IMAGES */
-        .product-img { width: 55px; height: 55px; object-fit: cover; border-radius: 10px; border: 2px solid rgba(196,168,130,0.4); box-shadow: 0 2px 8px rgba(44,26,14,0.1); }
-        .qr-img { width: 55px; height: 55px; border-radius: 8px; border: 2px solid rgba(196,168,130,0.4); }
-
-        /* DECORATION */
-        .dune-decoration {
-            position: fixed; bottom: 0; left: 0; right: 0; height: 100px;
-            background: linear-gradient(180deg, transparent, rgba(196,168,130,0.12));
-            pointer-events: none; z-index: 0;
-        }
+        .product-img { width: 55px; height: 55px; object-fit: cover; border-radius: 10px; border: 2px solid rgba(74,144,217,0.3); box-shadow: 0 2px 10px rgba(0,0,0,0.3); }
+        .qr-img { width: 55px; height: 55px; border-radius: 8px; border: 2px solid rgba(74,144,217,0.3); }
     </style>
 </head>
 <body>
-
     <nav class="navbar-saahel">
         <a class="navbar-brand-saahel" href="/">
-            <div class="logo-icon">🏜️</div>
+            <div class="logo-icon">🌙</div>
             SAAHEL
         </a>
         <div class="nav-links">
             <a href="/dashboard" class="btn-nav btn-nav-dashboard">📊 Dashboard</a>
-            <a href="/categories" class="btn-nav btn-nav-dashboard">🗂️ Catégories</a>
+            <a href="/categories" class="btn-nav btn-nav-cat">🗂️ Catégories</a>
             <a href="/ajouter" class="btn-nav btn-nav-add">+ Ajouter</a>
             <a href="/logout" class="btn-nav btn-nav-logout">🚪 Déconnexion</a>
         </div>
@@ -298,11 +221,9 @@
                 {% endfor %}
             {% endif %}
         {% endwith %}
-
         {% block content %}{% endblock %}
     </div>
 
-    <div class="dune-decoration"></div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

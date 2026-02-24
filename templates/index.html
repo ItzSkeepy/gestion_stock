@@ -2,43 +2,40 @@
 {% block content %}
 <h2 class="page-title">📦 Inventaire</h2>
 
-<!-- Barre de recherche et filtres -->
+<!-- Barre de recherche -->
 <form method="GET" action="/" style="margin-bottom:1.5rem;">
-    <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;background:rgba(255,255,255,0.7);backdrop-filter:blur(10px);border:1px solid rgba(196,168,130,0.4);border-radius:14px;padding:15px 20px;">
-        
-        <input type="text" name="search" value="{{ search }}" placeholder="🔍 Rechercher un article..." 
-            style="flex:1;min-width:200px;padding:10px 15px;border:1.5px solid rgba(196,168,130,0.4);border-radius:10px;background:rgba(255,255,255,0.8);color:var(--text);font-family:'Raleway',sans-serif;outline:none;transition:all 0.3s ease;"
-            onfocus="this.style.borderColor='var(--ocre)'" onblur="this.style.borderColor='rgba(196,168,130,0.4)'">
+    <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;background:rgba(10,22,40,0.7);backdrop-filter:blur(15px);border:1px solid rgba(74,144,217,0.2);border-radius:14px;padding:15px 20px;">
 
-        <select name="categorie" style="padding:10px 15px;border:1.5px solid rgba(196,168,130,0.4);border-radius:10px;background:rgba(255,255,255,0.8);color:var(--text);font-family:'Raleway',sans-serif;outline:none;">
+        <input type="text" name="search" value="{{ search }}" placeholder="🔍 Rechercher un article..."
+            style="flex:1;min-width:200px;padding:10px 15px;border:1.5px solid rgba(74,144,217,0.3);border-radius:10px;background:rgba(10,22,40,0.8);color:#D0E8FF;font-family:'Raleway',sans-serif;outline:none;transition:all 0.3s;"
+            onfocus="this.style.borderColor='#4A90D9'" onblur="this.style.borderColor='rgba(74,144,217,0.3)'">
+
+        <select name="categorie" style="padding:10px 15px;border:1.5px solid rgba(74,144,217,0.3);border-radius:10px;background:rgba(10,22,40,0.8);color:#D0E8FF;font-family:'Raleway',sans-serif;outline:none;">
             <option value="">🗂️ Toutes catégories</option>
             {% for cat in categories %}
                 <option value="{{ cat[0] }}" {% if categorie_filter == cat[0]|string %}selected{% endif %}>{{ cat[1] }}</option>
             {% endfor %}
         </select>
 
-        <select name="stock" style="padding:10px 15px;border:1.5px solid rgba(196,168,130,0.4);border-radius:10px;background:rgba(255,255,255,0.8);color:var(--text);font-family:'Raleway',sans-serif;outline:none;">
+        <select name="stock" style="padding:10px 15px;border:1.5px solid rgba(74,144,217,0.3);border-radius:10px;background:rgba(10,22,40,0.8);color:#D0E8FF;font-family:'Raleway',sans-serif;outline:none;">
             <option value="">📊 Tout le stock</option>
             <option value="bas" {% if stock_filter == 'bas' %}selected{% endif %}>⚠️ Stock bas (≤5)</option>
             <option value="ok" {% if stock_filter == 'ok' %}selected{% endif %}>✅ Stock OK</option>
         </select>
 
-        <button type="submit" style="padding:10px 22px;background:linear-gradient(135deg,var(--ocre),var(--terracotta));color:white;border:none;border-radius:10px;font-family:'Raleway',sans-serif;font-weight:600;cursor:pointer;transition:all 0.3s ease;">
+        <button type="submit" style="padding:10px 22px;background:linear-gradient(135deg,#2256A8,#4A90D9);color:white;border:none;border-radius:10px;font-family:'Raleway',sans-serif;font-weight:600;cursor:pointer;">
             Filtrer
         </button>
 
         {% if search or categorie_filter or stock_filter %}
-        <a href="/" style="padding:10px 18px;background:rgba(107,58,42,0.1);color:var(--brown);border:1px solid rgba(107,58,42,0.3);border-radius:10px;font-family:'Raleway',sans-serif;font-weight:600;text-decoration:none;transition:all 0.3s ease;">
+        <a href="/" style="padding:10px 18px;background:rgba(74,144,217,0.1);color:#7EC8F0;border:1px solid rgba(74,144,217,0.3);border-radius:10px;font-family:'Raleway',sans-serif;font-weight:600;text-decoration:none;">
             ✕ Réinitialiser
         </a>
         {% endif %}
     </div>
 </form>
 
-<!-- Résultats -->
-<div style="margin-bottom:10px;color:var(--text-light);font-size:0.88rem;">
-    {{ articles|length }} article(s) trouvé(s)
-</div>
+<div style="margin-bottom:10px;color:#7AAFD4;font-size:0.88rem;">{{ articles|length }} article(s) trouvé(s)</div>
 
 <div class="card-saahel">
     {% if articles %}
@@ -61,18 +58,18 @@
                     {% if article[5] %}
                         <img src="{{ article[5] }}" class="product-img">
                     {% else %}
-                        <div style="width:55px;height:55px;border-radius:10px;background:rgba(196,168,130,0.2);display:flex;align-items:center;justify-content:center;color:var(--sand-dark);font-size:1.5rem;">📷</div>
+                        <div style="width:55px;height:55px;border-radius:10px;background:rgba(74,144,217,0.1);display:flex;align-items:center;justify-content:center;font-size:1.5rem;border:1px solid rgba(74,144,217,0.2);">📷</div>
                     {% endif %}
                 </td>
-                <td style="font-weight:600;">{{ article[1] }}</td>
+                <td style="font-weight:600;color:#EFF8FF;">{{ article[1] }}</td>
                 <td>
                     {% if article[9] %}
-                        <span style="background:rgba(193,127,58,0.12);color:var(--ocre);padding:4px 12px;border-radius:20px;font-size:0.82rem;font-weight:600;border:1px solid rgba(193,127,58,0.3);">{{ article[9] }}</span>
+                        <span style="background:rgba(74,144,217,0.15);color:#7EC8F0;padding:4px 12px;border-radius:20px;font-size:0.82rem;font-weight:600;border:1px solid rgba(74,144,217,0.3);">{{ article[9] }}</span>
                     {% else %}
-                        <span style="color:var(--text-light);font-size:0.85rem;">—</span>
+                        <span style="color:#7AAFD4;font-size:0.85rem;">—</span>
                     {% endif %}
                 </td>
-                <td style="font-weight:700;color:var(--ocre);">{{ article[3] }} FCFA</td>
+                <td style="font-weight:700;color:#7EC8F0;">{{ article[3] }} FCFA</td>
                 <td>
                     {% if article[4] <= 5 %}
                         <span class="badge-low">{{ article[4] }} ⚠️</span>
@@ -87,8 +84,9 @@
                         <a href="{{ article[6] }}" download class="btn-saahel-outline mt-1">⬇ QR</a>
                     {% endif %}
                 </td>
-                <td>
+                <td style="white-space:nowrap;">
                     <a href="/modifier/{{ article[0] }}" class="btn-saahel-warning me-1">✏️</a>
+                    <a href="/historique/{{ article[0] }}" class="btn-saahel-outline me-1">📜</a>
                     <a href="/imprimer_qr/{{ article[0] }}" class="btn-saahel-outline me-1" target="_blank">🖨️</a>
                     <a href="/supprimer/{{ article[0] }}" class="btn-saahel-danger" onclick="return confirm('Supprimer cet article ?')">🗑️</a>
                 </td>
@@ -97,8 +95,8 @@
         </tbody>
     </table>
     {% else %}
-    <div style="padding:60px;text-align:center;color:var(--text-light);">
-        <div style="font-size:3rem;margin-bottom:10px;">🏜️</div>
+    <div style="padding:60px;text-align:center;color:#7AAFD4;">
+        <div style="font-size:3rem;margin-bottom:10px;">🌙</div>
         <p>Aucun article trouvé.</p>
     </div>
     {% endif %}

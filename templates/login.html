@@ -6,232 +6,149 @@
     <title>Saahel — Connexion</title>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Raleway:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --sand: #E8D5A3;
-            --sand-light: #F5ECD7;
-            --ocre: #C17F3A;
-            --terracotta: #C0613A;
-            --brown: #6B3A2A;
-            --gold: #D4A843;
-            --gold-light: #F0C870;
-            --dark: #2C1A0E;
-            --dark-mid: #3D2410;
-        }
-
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Raleway', sans-serif;
             min-height: 100vh;
-            background: linear-gradient(135deg, var(--dark) 0%, var(--dark-mid) 40%, #5C3020 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            background: radial-gradient(ellipse at 50% 0%, #0A2040 0%, #020812 50%, #000510 100%);
+            display: flex; align-items: center; justify-content: center;
             overflow: hidden;
         }
 
-        /* Dunes animées */
-        .dunes {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 200px;
-            z-index: 0;
-        }
+        .stars-container { position: fixed; inset: 0; z-index: 0; }
 
-        .dune {
-            position: absolute;
-            bottom: 0;
-            border-radius: 50%;
-        }
-
-        .dune1 {
-            width: 120%; left: -10%;
-            height: 120px;
-            background: rgba(196,168,130,0.08);
-            animation: dune-sway 8s ease-in-out infinite;
-        }
-
-        .dune2 {
-            width: 100%; left: 0;
-            height: 80px;
-            background: rgba(193,127,58,0.06);
-            animation: dune-sway 12s ease-in-out infinite reverse;
-        }
-
-        @keyframes dune-sway {
-            0%, 100% { transform: scaleX(1) translateY(0); }
-            50% { transform: scaleX(1.02) translateY(-5px); }
-        }
-
-        /* Étoiles */
-        .stars {
-            position: fixed;
-            inset: 0;
-            z-index: 0;
-        }
-
-        .star {
-            position: absolute;
-            background: white;
-            border-radius: 50%;
-            animation: twinkle var(--duration) ease-in-out infinite;
-        }
-
-        @keyframes twinkle {
+        /* Petites étoiles */
+        @keyframes twinkleS {
             0%, 100% { opacity: 0.2; transform: scale(1); }
-            50% { opacity: 1; transform: scale(1.3); }
+            50% { opacity: 1; transform: scale(1.6); box-shadow: 0 0 6px 2px rgba(255,255,255,0.9); }
+        }
+        /* Moyennes étoiles */
+        @keyframes twinkleM {
+            0%, 100% { opacity: 0.3; transform: scale(1); box-shadow: 0 0 3px rgba(150,210,255,0.4); }
+            50% { opacity: 1; transform: scale(2); box-shadow: 0 0 15px 5px rgba(150,210,255,1), 0 0 30px 10px rgba(74,144,217,0.5); }
+        }
+        /* Grandes étoiles très brillantes */
+        @keyframes twinkleL {
+            0%, 100% { opacity: 0.4; transform: scale(1); box-shadow: 0 0 8px 3px rgba(200,230,255,0.6); }
+            33% { opacity: 1; transform: scale(2.5); box-shadow: 0 0 25px 10px rgba(255,255,255,1), 0 0 50px 20px rgba(150,210,255,0.7), 0 0 80px 30px rgba(74,144,217,0.3); }
+            66% { opacity: 0.7; transform: scale(1.5); box-shadow: 0 0 12px 4px rgba(200,230,255,0.8); }
+        }
+        /* Étoiles dorées */
+        @keyframes twinkleGold {
+            0%, 100% { opacity: 0.4; transform: scale(1); box-shadow: 0 0 6px 2px rgba(240,192,64,0.5); }
+            50% { opacity: 1; transform: scale(2.2); box-shadow: 0 0 20px 8px rgba(255,224,128,1), 0 0 40px 15px rgba(240,192,64,0.6); }
         }
 
-        /* CARTE LOGIN */
+        .star { position: absolute; border-radius: 50%; }
+
+        .milky-way {
+            position: fixed; inset: 0; z-index: 0;
+            background: radial-gradient(ellipse 70% 15% at 65% 25%, rgba(100,160,255,0.07) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .moon {
+            position: fixed; top: 8%; right: 12%;
+            width: 65px; height: 65px;
+            background: radial-gradient(circle at 35% 35%, #FFF8D0, #F0C040 60%, #C8960A 100%);
+            border-radius: 50%; z-index: 1;
+            animation: moonGlow 4s ease-in-out infinite;
+        }
+        @keyframes moonGlow {
+            0%, 100% { box-shadow: 0 0 25px 10px rgba(240,192,64,0.5), 0 0 70px 25px rgba(240,192,64,0.2); }
+            50% { box-shadow: 0 0 40px 15px rgba(255,220,80,0.7), 0 0 100px 40px rgba(240,192,64,0.3); }
+        }
+
+        .dunes { position: fixed; bottom: 0; left: 0; right: 0; z-index: 1; pointer-events: none; }
+        .dune { position: absolute; bottom: 0; border-radius: 50%; }
+        .dune1 { width: 130%; left: -15%; height: 150px; background: linear-gradient(180deg, rgba(8,18,36,0.7), rgba(5,11,26,0.9)); }
+        .dune2 { width: 110%; left: -5%; height: 95px; background: linear-gradient(180deg, rgba(13,31,60,0.6), rgba(10,22,40,0.8)); }
+        .dune3 { width: 90%; left: 5%; height: 58px; background: rgba(26,58,107,0.4); }
+
         .login-container {
-            position: relative;
-            z-index: 10;
-            width: 100%;
-            max-width: 420px;
-            padding: 20px;
+            position: relative; z-index: 10;
+            width: 100%; max-width: 420px; padding: 20px;
             animation: fadeInUp 0.6s ease;
         }
-
         @keyframes fadeInUp {
             from { opacity: 0; transform: translateY(30px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
         .login-card {
-            background: rgba(245,236,215,0.07);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(212,168,67,0.25);
-            border-radius: 24px;
-            padding: 40px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.4), inset 0 1px 0 rgba(212,168,67,0.1);
+            background: rgba(6,15,32,0.8);
+            backdrop-filter: blur(25px);
+            border: 1px solid rgba(74,144,217,0.25);
+            border-radius: 24px; padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.6), inset 0 1px 0 rgba(126,200,240,0.1);
         }
 
-        .logo-section {
-            text-align: center;
-            margin-bottom: 35px;
-        }
+        .logo-section { text-align: center; margin-bottom: 35px; }
 
         .logo-circle {
-            width: 70px;
-            height: 70px;
-            background: linear-gradient(135deg, var(--gold), var(--ocre));
+            width: 75px; height: 75px;
+            background: linear-gradient(135deg, #4A90D9, #1A3A6B);
             border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
-            margin: 0 auto 15px;
-            box-shadow: 0 0 30px rgba(212,168,67,0.4);
-            animation: glow 3s ease-in-out infinite;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 2.2rem; margin: 0 auto 15px;
+            animation: logoGlow 3s ease-in-out infinite;
         }
-
-        @keyframes glow {
-            0%, 100% { box-shadow: 0 0 20px rgba(212,168,67,0.4); }
-            50% { box-shadow: 0 0 40px rgba(212,168,67,0.7); }
+        @keyframes logoGlow {
+            0%, 100% { box-shadow: 0 0 25px rgba(74,144,217,0.6), 0 0 50px rgba(74,144,217,0.2); }
+            50% { box-shadow: 0 0 50px rgba(126,200,240,0.9), 0 0 100px rgba(74,144,217,0.5); }
         }
 
         .brand-name {
-            font-family: 'Cinzel', serif;
-            font-size: 2.2rem;
-            font-weight: 700;
-            color: var(--gold);
-            letter-spacing: 6px;
-            text-shadow: 0 0 20px rgba(212,168,67,0.5);
+            font-family: 'Cinzel', serif; font-size: 2.2rem; font-weight: 700;
+            color: #7EC8F0; letter-spacing: 6px;
+            text-shadow: 0 0 20px rgba(126,200,240,0.7), 0 0 40px rgba(74,144,217,0.4);
         }
-
-        .brand-subtitle {
-            color: rgba(232,213,163,0.5);
-            font-size: 0.75rem;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            margin-top: 5px;
-        }
+        .brand-subtitle { color: rgba(126,200,240,0.5); font-size: 0.75rem; letter-spacing: 3px; text-transform: uppercase; margin-top: 5px; }
 
         .form-group { margin-bottom: 20px; }
-
-        .form-label {
-            display: block;
-            color: rgba(232,213,163,0.7);
-            font-size: 0.82rem;
-            font-weight: 600;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            margin-bottom: 8px;
-        }
+        .form-label { display: block; color: rgba(126,200,240,0.7); font-size: 0.82rem; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 8px; }
 
         .form-input {
-            width: 100%;
-            padding: 12px 18px;
-            background: rgba(255,255,255,0.06);
-            border: 1.5px solid rgba(212,168,67,0.2);
-            border-radius: 12px;
-            color: var(--sand);
-            font-family: 'Raleway', sans-serif;
-            font-size: 0.95rem;
-            transition: all 0.3s ease;
-            outline: none;
+            width: 100%; padding: 12px 18px;
+            background: rgba(10,22,40,0.8); border: 1.5px solid rgba(74,144,217,0.25);
+            border-radius: 12px; color: #B8E0F7;
+            font-family: 'Raleway', sans-serif; font-size: 0.95rem;
+            transition: all 0.3s ease; outline: none;
         }
-
-        .form-input::placeholder { color: rgba(232,213,163,0.3); }
-
-        .form-input:focus {
-            border-color: var(--gold);
-            background: rgba(212,168,67,0.08);
-            box-shadow: 0 0 0 3px rgba(212,168,67,0.1);
-        }
+        .form-input::placeholder { color: rgba(126,200,240,0.25); }
+        .form-input:focus { border-color: #4A90D9; background: rgba(13,31,60,0.9); box-shadow: 0 0 0 3px rgba(74,144,217,0.2); color: #EFF8FF; }
 
         .btn-login {
-            width: 100%;
-            padding: 14px;
-            background: linear-gradient(135deg, var(--gold), var(--ocre));
-            color: var(--dark);
-            border: none;
-            border-radius: 12px;
-            font-family: 'Cinzel', serif;
-            font-size: 1rem;
-            font-weight: 700;
-            letter-spacing: 2px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 10px;
+            width: 100%; padding: 14px;
+            background: linear-gradient(135deg, #2256A8, #4A90D9);
+            color: white; border: none; border-radius: 12px;
+            font-family: 'Cinzel', serif; font-size: 1rem; font-weight: 700;
+            letter-spacing: 2px; cursor: pointer; transition: all 0.3s ease; margin-top: 10px;
         }
-
-        .btn-login:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(212,168,67,0.4);
-        }
-
-        .btn-login:active { transform: translateY(0); }
+        .btn-login:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(74,144,217,0.6); }
 
         .alert-danger {
-            background: rgba(192,97,58,0.15);
-            border: 1px solid rgba(192,97,58,0.3);
-            border-left: 3px solid var(--terracotta);
-            border-radius: 10px;
-            padding: 10px 15px;
-            color: #FFB49A;
-            font-size: 0.87rem;
-            margin-bottom: 20px;
+            background: rgba(60,13,13,0.5); border: 1px solid rgba(255,100,100,0.3);
+            border-left: 3px solid #FF7070; border-radius: 10px;
+            padding: 10px 15px; color: #FF9090; font-size: 0.87rem; margin-bottom: 20px;
         }
     </style>
 </head>
 <body>
-
-    <!-- Étoiles -->
-    <div class="stars" id="stars"></div>
-
-    <!-- Dunes -->
+    <div class="stars-container" id="starsContainer"></div>
+    <div class="milky-way"></div>
+    <div class="moon"></div>
     <div class="dunes">
         <div class="dune dune1"></div>
         <div class="dune dune2"></div>
+        <div class="dune dune3"></div>
     </div>
 
     <div class="login-container">
         <div class="login-card">
             <div class="logo-section">
-                <div class="logo-circle">🏜️</div>
+                <div class="logo-circle">🌙</div>
                 <div class="brand-name">SAAHEL</div>
                 <div class="brand-subtitle">Gestion de Stock</div>
             </div>
@@ -259,21 +176,54 @@
     </div>
 
     <script>
-        // Génération des étoiles
-        const starsContainer = document.getElementById('stars');
-        for (let i = 0; i < 80; i++) {
-            const star = document.createElement('div');
-            star.classList.add('star');
-            const size = Math.random() * 2.5 + 0.5;
-            star.style.cssText = `
-                width: ${size}px;
-                height: ${size}px;
-                top: ${Math.random() * 70}%;
-                left: ${Math.random() * 100}%;
-                --duration: ${Math.random() * 3 + 2}s;
-                animation-delay: ${Math.random() * 3}s;
+        const container = document.getElementById('starsContainer');
+
+        // 150 petites étoiles
+        for (let i = 0; i < 150; i++) {
+            const s = document.createElement('div');
+            s.className = 'star';
+            const size = Math.random() * 1.5 + 0.5;
+            const color = i % 5 === 0 ? '#FFE080' : i % 4 === 0 ? '#A0D0FF' : '#FFFFFF';
+            s.style.cssText = `
+                width:${size}px; height:${size}px;
+                top:${Math.random()*85}%; left:${Math.random()*100}%;
+                background:${color};
+                animation: twinkleS ${Math.random()*3+2}s ease-in-out infinite;
+                animation-delay: -${Math.random()*5}s;
             `;
-            starsContainer.appendChild(star);
+            container.appendChild(s);
+        }
+
+        // 60 étoiles moyennes
+        for (let i = 0; i < 60; i++) {
+            const s = document.createElement('div');
+            s.className = 'star';
+            const size = Math.random() * 2 + 1.5;
+            const isGold = i % 6 === 0;
+            s.style.cssText = `
+                width:${size}px; height:${size}px;
+                top:${Math.random()*80}%; left:${Math.random()*100}%;
+                background:${isGold ? '#FFE080' : '#A0D0FF'};
+                animation: ${isGold ? 'twinkleGold' : 'twinkleM'} ${Math.random()*4+2}s ease-in-out infinite;
+                animation-delay: -${Math.random()*6}s;
+            `;
+            container.appendChild(s);
+        }
+
+        // 20 grandes étoiles super brillantes
+        for (let i = 0; i < 20; i++) {
+            const s = document.createElement('div');
+            s.className = 'star';
+            const size = Math.random() * 3 + 3;
+            const isGold = i % 4 === 0;
+            s.style.cssText = `
+                width:${size}px; height:${size}px;
+                top:${Math.random()*75}%; left:${Math.random()*100}%;
+                background:${isGold ? '#FFE080' : '#FFFFFF'};
+                animation: ${isGold ? 'twinkleGold' : 'twinkleL'} ${Math.random()*5+3}s ease-in-out infinite;
+                animation-delay: -${Math.random()*8}s;
+            `;
+            container.appendChild(s);
         }
     </script>
 </body>

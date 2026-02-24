@@ -6,162 +6,83 @@
     <title>QR Code — {{ article[1] }}</title>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Raleway:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --sand-light: #F5ECD7;
-            --ocre: #C17F3A;
-            --brown: #6B3A2A;
-            --gold: #D4A843;
-            --dark: #2C1A0E;
-        }
-
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Raleway', sans-serif;
-            background: var(--sand-light);
+            background: linear-gradient(180deg, #050B1A 0%, #0A1628 50%, #0D1F3C 100%);
             min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center; padding: 20px;
         }
 
-        .no-print {
-            margin-bottom: 30px;
-            display: flex;
-            gap: 12px;
-        }
+        .no-print { margin-bottom: 30px; display: flex; gap: 12px; }
 
         .btn-print {
             padding: 12px 30px;
-            background: linear-gradient(135deg, var(--ocre), #8B4F1E);
-            color: white;
-            border: none;
-            border-radius: 25px;
-            font-family: 'Cinzel', serif;
-            font-size: 0.9rem;
-            font-weight: 700;
-            letter-spacing: 1.5px;
-            cursor: pointer;
-            transition: all 0.3s ease;
+            background: linear-gradient(135deg, #2256A8, #4A90D9);
+            color: white; border: none; border-radius: 25px;
+            font-family: 'Cinzel', serif; font-size: 0.9rem; font-weight: 700;
+            letter-spacing: 1.5px; cursor: pointer; transition: all 0.3s ease;
         }
-
-        .btn-print:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(193,127,58,0.4);
-        }
+        .btn-print:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(74,144,217,0.5); }
 
         .btn-back {
             padding: 12px 24px;
-            background: rgba(107,58,42,0.1);
-            color: var(--brown);
-            border: 1px solid rgba(107,58,42,0.3);
-            border-radius: 25px;
-            font-family: 'Raleway', sans-serif;
-            font-weight: 600;
-            text-decoration: none;
-            transition: all 0.3s ease;
+            background: rgba(74,144,217,0.1); color: #7EC8F0;
+            border: 1px solid rgba(74,144,217,0.3); border-radius: 25px;
+            font-family: 'Raleway', sans-serif; font-weight: 600;
+            text-decoration: none; transition: all 0.3s ease;
         }
+        .btn-back:hover { background: rgba(74,144,217,0.2); color: #EFF8FF; }
 
-        .btn-back:hover { background: var(--brown); color: var(--sand-light); }
-
-        /* ÉTIQUETTE */
-        .label-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-            max-width: 900px;
-        }
+        .label-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; max-width: 900px; }
 
         .label {
-            background: white;
-            border: 2px solid rgba(196,168,130,0.5);
-            border-radius: 16px;
-            padding: 20px;
-            text-align: center;
-            box-shadow: 0 4px 15px rgba(44,26,14,0.08);
-            position: relative;
-            overflow: hidden;
+            background: rgba(10,22,40,0.9);
+            border: 1px solid rgba(74,144,217,0.3);
+            border-radius: 16px; padding: 20px; text-align: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3), inset 0 1px 0 rgba(74,144,217,0.1);
+            position: relative; overflow: hidden;
         }
-
         .label::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, var(--gold), var(--ocre));
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+            background: linear-gradient(90deg, #2256A8, #4A90D9, #7EC8F0);
         }
 
-        .label-brand {
-            font-family: 'Cinzel', serif;
-            font-size: 0.7rem;
-            letter-spacing: 3px;
-            color: var(--gold);
-            margin-bottom: 10px;
-        }
+        .label-brand { font-family: 'Cinzel', serif; font-size: 0.7rem; letter-spacing: 3px; color: #7EC8F0; margin-bottom: 10px; text-shadow: 0 0 10px rgba(126,200,240,0.4); }
+        .label-qr { width: 120px; height: 120px; margin: 0 auto 12px; border: 2px solid rgba(74,144,217,0.3); border-radius: 8px; }
+        .label-name { font-family: 'Cinzel', serif; font-size: 0.85rem; font-weight: 700; color: #EFF8FF; margin-bottom: 6px; line-height: 1.3; }
+        .label-price { font-size: 1.1rem; font-weight: 700; color: #7EC8F0; margin-bottom: 4px; }
+        .label-category { font-size: 0.72rem; color: #7AAFD4; letter-spacing: 1px; text-transform: uppercase; }
 
-        .label-qr {
-            width: 120px;
-            height: 120px;
-            margin: 0 auto 12px;
-            border: 2px solid rgba(196,168,130,0.3);
-            border-radius: 8px;
-        }
-
-        .label-name {
-            font-family: 'Cinzel', serif;
-            font-size: 0.85rem;
-            font-weight: 700;
-            color: var(--brown);
-            margin-bottom: 6px;
-            line-height: 1.3;
-        }
-
-        .label-price {
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: var(--ocre);
-            margin-bottom: 4px;
-        }
-
-        .label-category {
-            font-size: 0.72rem;
-            color: #999;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-        }
-
-        /* IMPRESSION */
         @media print {
             .no-print { display: none !important; }
             body { background: white; padding: 10px; }
-            .label { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; }
+            .label { background: white; box-shadow: none; border: 1px solid #ddd; break-inside: avoid; }
+            .label::before { background: #4A90D9; }
+            .label-brand, .label-name { color: #0A1628; }
+            .label-price { color: #2256A8; }
+            .label-category { color: #555; }
             .label-grid { gap: 10px; }
         }
     </style>
 </head>
 <body>
-
     <div class="no-print">
         <button onclick="window.print()" class="btn-print">🖨️ IMPRIMER</button>
         <a href="/" class="btn-back">← Retour</a>
     </div>
 
-    <!-- 6 étiquettes identiques pour impression -->
     <div class="label-grid">
         {% for i in range(6) %}
         <div class="label">
-            <div class="label-brand">🏜️ SAAHEL</div>
+            <div class="label-brand">🌙 SAAHEL</div>
             <img src="{{ article[6] }}" class="label-qr" alt="QR Code">
             <div class="label-name">{{ article[1] }}</div>
             <div class="label-price">{{ article[3] }} FCFA</div>
-            {% if article[9] is defined and article[9] %}
-                <div class="label-category">{{ article[9] }}</div>
-            {% endif %}
         </div>
         {% endfor %}
     </div>
-
 </body>
 </html>

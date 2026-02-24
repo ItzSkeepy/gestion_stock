@@ -22,17 +22,15 @@
                 <input type="number" name="stock" class="form-control" value="{{ article[4] }}" required>
             </div>
         </div>
-
-        <div class="mb-3">
+        <div class="mb-4">
             <label class="form-label">Catégorie</label>
             <select name="categorie_id" class="form-control">
                 <option value="">— Sans catégorie —</option>
                 {% for cat in categories %}
-            <option value="{{ cat[0] }}" {% if article[8] == cat[0] %}selected{% endif %}>{{ cat[1] }}</option>
-        {% endfor %}
-    </select>
-    </div>
-
+                    <option value="{{ cat[0] }}" {% if article[8] == cat[0] %}selected{% endif %}>{{ cat[1] }}</option>
+                {% endfor %}
+            </select>
+        </div>
         <div class="d-flex gap-3">
             <button type="submit" class="btn-saahel-primary">💾 Enregistrer</button>
             <a href="/" class="btn-saahel-secondary">Annuler</a>

@@ -236,6 +236,21 @@ def modifier(id):
         prix = request.form['prix']
         stock = request.form['stock']
         categorie_id = request.form.get('categorie_id') or None
+
+        # Récupérer les anciennes valeurs
+        cur.execute("SELECT nom, description, prix, stock FROM articles WHERE id = %s", (id,))
+        ancien = cur.fetchone()
+
+        # Enregistrer les modifications
+        champs = [('nom', ancien[0], nom), ('description', ancien[1], description),
+                  ('prix', str(ancien[2]), prix), ('stock', str(ancien[3]), stock)]
+        for champ, ancienne, nouvelle in champs:
+            if str(ancienne) != str(nouvelle):
+                cur.execute("""
+                    INSERT INTO historique_modifications (article_id, champ_modifie, ancienne_valeur, nouvelle_valeur)
+                    VALUES (%s, %s, %s, %s)
+                """, (id, champ, ancienne, nouvelle))
+
         cur.execute("""
             UPDATE articles SET nom=%s, description=%s, prix=%s, stock=%s, categorie_id=%s WHERE id=%s
         """, (nom, description, prix, stock, categorie_id, id))
@@ -253,12 +268,30 @@ def modifier(id):
     conn.close()
     return render_template('modifier.html', article=article, categories=categories)
 
+@app.route('/historique/<int:id>')
+@login_required
+def historique_article(id):
+    conn = get_db()
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM articles WHERE id = %s", (id,))
+    article = cur.fetchone()
+    cur.execute("""
+        SELECT * FROM historique_modifications 
+        WHERE article_id = %s 
+        ORDER BY date_modification DESC
+    """, (id,))
+    historique = cur.fetchall()
+    cur.close()
+    conn.close()
+    return render_template('historique.html', article=article, historique=historique)
+
 # SUPPRIMER UN ARTICLE
 @app.route('/supprimer/<int:id>')
 @login_required
 def supprimer(id):
     conn = get_db()
     cur = conn.cursor()
+    cur.execute("DELETE FROM historique_modifications WHERE article_id = %s", (id,))
     cur.execute("DELETE FROM ventes WHERE article_id = %s", (id,))
     cur.execute("DELETE FROM articles WHERE id = %s", (id,))
     conn.commit()
