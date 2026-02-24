@@ -124,17 +124,40 @@ def logout():
 def index():
     conn = get_db()
     cur = conn.cursor()
-    cur.execute("""
+    
+    search = request.args.get('search', '')
+    categorie_filter = request.args.get('categorie', '')
+    stock_filter = request.args.get('stock', '')
+
+    query = """
         SELECT a.*, c.nom as categorie_nom 
         FROM articles a 
         LEFT JOIN categories c ON a.categorie_id = c.id
-    """)
+        WHERE 1=1
+    """
+    params = []
+
+    if search:
+        query += " AND (a.nom LIKE %s OR a.description LIKE %s)"
+        params.extend([f'%{search}%', f'%{search}%'])
+
+    if categorie_filter:
+        query += " AND a.categorie_id = %s"
+        params.append(categorie_filter)
+
+    if stock_filter == 'bas':
+        query += " AND a.stock <= 5"
+    elif stock_filter == 'ok':
+        query += " AND a.stock > 5"
+
+    cur.execute(query, params)
     articles = cur.fetchall()
     cur.execute("SELECT * FROM categories")
     categories = cur.fetchall()
     cur.close()
     conn.close()
-    return render_template('index.html', articles=articles, categories=categories)
+    return render_template('index.html', articles=articles, categories=categories, 
+                         search=search, categorie_filter=categorie_filter, stock_filter=stock_filter)
 
 # AJOUTER UN ARTICLE
 @app.route('/ajouter', methods=['GET', 'POST'])
