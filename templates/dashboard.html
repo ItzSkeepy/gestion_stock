@@ -148,23 +148,38 @@
     </div>
 </div>
 
+<!-- Données JSON cachées -->
+<script type="application/json" id="data-ventes-jour-labels">{{ ventes_jour_labels | tojson }}</script>
+<script type="application/json" id="data-ventes-jour-data">{{ ventes_jour_data | tojson }}</script>
+<script type="application/json" id="data-ca-semaine-labels">{{ ca_semaine_labels | tojson }}</script>
+<script type="application/json" id="data-ca-semaine-data">{{ ca_semaine_data | tojson }}</script>
+<script type="application/json" id="data-ventes-article-labels">{{ ventes_article_labels | tojson }}</script>
+<script type="application/json" id="data-ventes-article-data">{{ ventes_article_data | tojson }}</script>
+
 <!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     const gridColor = 'rgba(41,182,246,0.1)';
     const textColor = '#64B0D8';
-
     Chart.defaults.color = textColor;
     Chart.defaults.borderColor = gridColor;
+
+    // Données passées via des balises cachées
+    const ventesJourLabels = JSON.parse(document.getElementById('data-ventes-jour-labels').textContent);
+    const ventesJourData = JSON.parse(document.getElementById('data-ventes-jour-data').textContent);
+    const caSemaineLabels = JSON.parse(document.getElementById('data-ca-semaine-labels').textContent);
+    const caSemaineData = JSON.parse(document.getElementById('data-ca-semaine-data').textContent);
+    const ventesArticleLabels = JSON.parse(document.getElementById('data-ventes-article-labels').textContent);
+    const ventesArticleData = JSON.parse(document.getElementById('data-ventes-article-data').textContent);
 
     // Courbe ventes par jour
     new Chart(document.getElementById('chartVentesJour'), {
         type: 'line',
         data: {
-            labels: {{ ventes_jour_labels | tojson }},
+            labels: ventesJourLabels,
             datasets: [{
                 label: 'Articles vendus',
-                data: {{ ventes_jour_data | tojson }},
+                data: ventesJourData,
                 borderColor: '#29B6F6',
                 backgroundColor: 'rgba(41,182,246,0.1)',
                 borderWidth: 2.5,
@@ -189,10 +204,10 @@
     new Chart(document.getElementById('chartCaSemaine'), {
         type: 'bar',
         data: {
-            labels: {{ ca_semaine_labels | tojson }},
+            labels: caSemaineLabels,
             datasets: [{
                 label: 'CA (FCFA)',
-                data: {{ ca_semaine_data | tojson }},
+                data: caSemaineData,
                 backgroundColor: 'rgba(240,192,64,0.3)',
                 borderColor: '#F0C040',
                 borderWidth: 2,
@@ -213,18 +228,16 @@
     new Chart(document.getElementById('chartVentesArticle'), {
         type: 'bar',
         data: {
-            labels: {{ ventes_article_labels | tojson }},
+            labels: ventesArticleLabels,
             datasets: [{
                 label: 'Quantité vendue',
-                data: {{ ventes_article_data | tojson }},
+                data: ventesArticleData,
                 backgroundColor: [
                     'rgba(41,182,246,0.4)','rgba(129,212,250,0.4)','rgba(21,101,192,0.4)',
                     'rgba(25,118,210,0.4)','rgba(66,165,245,0.4)','rgba(144,202,249,0.4)',
                     'rgba(13,71,161,0.4)','rgba(41,182,246,0.4)'
                 ],
-                borderColor: [
-                    '#29B6F6','#81D4FA','#1565C0','#1976D2','#42A5F5','#90CAF9','#0D47A1','#29B6F6'
-                ],
+                borderColor: ['#29B6F6','#81D4FA','#1565C0','#1976D2','#42A5F5','#90CAF9','#0D47A1','#29B6F6'],
                 borderWidth: 2,
                 borderRadius: 8
             }]
