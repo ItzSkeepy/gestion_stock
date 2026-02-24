@@ -8,6 +8,10 @@ import qrcode
 import os
 import io
 from werkzeug.utils import secure_filename
+from openpyxl import Workbook
+from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
+from flask import send_file
+import tempfile
 
 app = Flask(__name__)
 app.secret_key = 'ton_secret_key_ici'
@@ -295,6 +299,111 @@ def vendre(id):
     cur.close()
     conn.close()
     return redirect(url_for('article_public', id=id))
+
+@app.route('/export/stock')
+@login_required
+def export_stock():
+    conn = get_db()
+    cur = conn.cursor()
+    cur.execute("""
+        SELECT a.nom, c.nom as categorie, a.prix, a.stock, (a.prix * a.stock) as valeur_stock, a.date_ajout
+        FROM articles a
+        LEFT JOIN categories c ON a.categorie_id = c.id
+        ORDER BY a.nom
+    """)
+    articles = cur.fetchall()
+    cur.close()
+    conn.close()
+
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "Stock"
+
+    # Style en-tête
+    header_fill = PatternFill(start_color="2C1A0E", end_color="2C1A0E", fill_type="solid")
+    header_font = Font(color="D4A843", bold=True, size=11)
+    center = Alignment(horizontal='center', vertical='center')
+
+    headers = ['Article', 'Catégorie', 'Prix (FCFA)', 'Stock', 'Valeur Stock (FCFA)', 'Date Ajout']
+    for col, header in enumerate(headers, 1):
+        cell = ws.cell(row=1, column=col, value=header)
+        cell.fill = header_fill
+        cell.font = header_font
+        cell.alignment = center
+
+    # Données
+    for row, article in enumerate(articles, 2):
+        for col, value in enumerate(article, 1):
+            cell = ws.cell(row=row, column=col, value=value)
+            cell.alignment = center
+            if row % 2 == 0:
+                cell.fill = PatternFill(start_color="FDF6E8", end_color="FDF6E8", fill_type="solid")
+
+    # Largeur colonnes
+    ws.column_dimensions['A'].width = 25
+    ws.column_dimensions['B'].width = 20
+    ws.column_dimensions['C'].width = 15
+    ws.column_dimensions['D'].width = 10
+    ws.column_dimensions['E'].width = 20
+    ws.column_dimensions['F'].width = 20
+
+    tmp = tempfile.NamedTemporaryFile(delete=False, suffix='.xlsx')
+    wb.save(tmp.name)
+    tmp.close()
+
+    return send_file(tmp.name, as_attachment=True, download_name='stock_saahel.xlsx', mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+
+
+@app.route('/export/ventes')
+@login_required
+def export_ventes():
+    conn = get_db()
+    cur = conn.cursor()
+    cur.execute("""
+        SELECT a.nom, c.nom as categorie, v.quantite, a.prix, (v.quantite * a.prix) as total, v.date_vente
+        FROM ventes v
+        JOIN articles a ON v.article_id = a.id
+        LEFT JOIN categories c ON a.categorie_id = c.id
+        ORDER BY v.date_vente DESC
+    """)
+    ventes = cur.fetchall()
+    cur.close()
+    conn.close()
+
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "Ventes"
+
+    header_fill = PatternFill(start_color="2C1A0E", end_color="2C1A0E", fill_type="solid")
+    header_font = Font(color="D4A843", bold=True, size=11)
+    center = Alignment(horizontal='center', vertical='center')
+
+    headers = ['Article', 'Catégorie', 'Quantité', 'Prix Unitaire (FCFA)', 'Total (FCFA)', 'Date Vente']
+    for col, header in enumerate(headers, 1):
+        cell = ws.cell(row=1, column=col, value=header)
+        cell.fill = header_fill
+        cell.font = header_font
+        cell.alignment = center
+
+    for row, vente in enumerate(ventes, 2):
+        for col, value in enumerate(vente, 1):
+            cell = ws.cell(row=row, column=col, value=value)
+            cell.alignment = center
+            if row % 2 == 0:
+                cell.fill = PatternFill(start_color="FDF6E8", end_color="FDF6E8", fill_type="solid")
+
+    ws.column_dimensions['A'].width = 25
+    ws.column_dimensions['B'].width = 20
+    ws.column_dimensions['C'].width = 12
+    ws.column_dimensions['D'].width = 20
+    ws.column_dimensions['E'].width = 18
+    ws.column_dimensions['F'].width = 20
+
+    tmp = tempfile.NamedTemporaryFile(delete=False, suffix='.xlsx')
+    wb.save(tmp.name)
+    tmp.close()
+
+    return send_file(tmp.name, as_attachment=True, download_name='ventes_saahel.xlsx', mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
 
 # TABLEAU DE BORD
 @app.route('/dashboard')
