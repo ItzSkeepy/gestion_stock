@@ -159,6 +159,17 @@ def index():
     return render_template('index.html', articles=articles, categories=categories, 
                          search=search, categorie_filter=categorie_filter, stock_filter=stock_filter)
 
+@app.route('/imprimer_qr/<int:id>')
+@login_required
+def imprimer_qr(id):
+    conn = get_db()
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM articles WHERE id = %s", (id,))
+    article = cur.fetchone()
+    cur.close()
+    conn.close()
+    return render_template('imprimer_qr.html', article=article)
+
 # AJOUTER UN ARTICLE
 @app.route('/ajouter', methods=['GET', 'POST'])
 @login_required
