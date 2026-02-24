@@ -12,6 +12,8 @@ from openpyxl import Workbook
 from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
 from flask import send_file
 import tempfile
+from collections import defaultdict
+from datetime import datetime, timedelta
 
 app = Flask(__name__)
 app.secret_key = 'ton_secret_key_ici'
@@ -448,41 +450,74 @@ def dashboard():
     cur.execute("SELECT COUNT(*) FROM articles")
     total_articles = cur.fetchone()[0]
 
-    cur.execute("SELECT COUNT(*), SUM(quantite) FROM ventes")
-    ventes_stats = cur.fetchone()
-    total_ventes = ventes_stats[0]
-    total_quantite = ventes_stats[1] or 0
+    cur.execute("SELECT COUNT(*) FROM ventes")
+    total_ventes = cur.fetchone()[0]
 
-    cur.execute("""
-        SELECT SUM(a.prix * v.quantite) 
-        FROM ventes v 
-        JOIN articles a ON v.article_id = a.id
-    """)
+    cur.execute("SELECT SUM(quantite) FROM ventes")
+    total_quantite = cur.fetchone()[0] or 0
+
+    cur.execute("SELECT SUM(v.quantite * a.prix) FROM ventes v JOIN articles a ON v.article_id = a.id")
     chiffre_affaires = cur.fetchone()[0] or 0
 
     cur.execute("SELECT * FROM articles WHERE stock <= 5")
     stock_bas = cur.fetchall()
 
     cur.execute("""
-        SELECT v.id, a.nom, v.quantite, a.prix, (v.quantite * a.prix) as total, v.date_vente
-        FROM ventes v
-        JOIN articles a ON v.article_id = a.id
-        ORDER BY v.date_vente DESC
-    """)
-    historique = cur.fetchall()
-
-    cur.execute("""
-        SELECT a.nom, SUM(v.quantite) as total_vendu
-        FROM ventes v
-        JOIN articles a ON v.article_id = a.id
-        GROUP BY a.id, a.nom
-        ORDER BY total_vendu DESC
-        LIMIT 5
+        SELECT a.nom, SUM(v.quantite) as total
+        FROM ventes v JOIN articles a ON v.article_id = a.id
+        GROUP BY a.id ORDER BY total DESC LIMIT 5
     """)
     top_articles = cur.fetchall()
 
+    cur.execute("""
+        SELECT v.id, a.nom, v.quantite, a.prix, (v.quantite * a.prix), v.date_vente
+        FROM ventes v JOIN articles a ON v.article_id = a.id
+        ORDER BY v.date_vente DESC LIMIT 50
+    """)
+    historique = cur.fetchall()
+
+    # Courbe ventes par jour (30 derniers jours)
+    cur.execute("""
+        SELECT DATE(date_vente) as jour, SUM(quantite) as total
+        FROM ventes
+        WHERE date_vente >= DATE_SUB(NOW(), INTERVAL 30 DAY)
+        GROUP BY DATE(date_vente)
+        ORDER BY jour
+    """)
+    ventes_jour_raw = cur.fetchall()
+
+    # Chiffre d'affaires par semaine (8 dernières semaines)
+    cur.execute("""
+        SELECT YEARWEEK(date_vente, 1) as semaine,
+               MIN(DATE(date_vente)) as debut,
+               SUM(v.quantite * a.prix) as ca
+        FROM ventes v JOIN articles a ON v.article_id = a.id
+        WHERE date_vente >= DATE_SUB(NOW(), INTERVAL 56 DAY)
+        GROUP BY YEARWEEK(date_vente, 1)
+        ORDER BY semaine
+    """)
+    ca_semaine_raw = cur.fetchall()
+
+    # Ventes par article (top 8)
+    cur.execute("""
+        SELECT a.nom, SUM(v.quantite) as total
+        FROM ventes v JOIN articles a ON v.article_id = a.id
+        GROUP BY a.id ORDER BY total DESC LIMIT 8
+    """)
+    ventes_article_raw = cur.fetchall()
+
     cur.close()
     conn.close()
+
+    # Formater pour Chart.js
+    ventes_jour_labels = [str(r[0]) for r in ventes_jour_raw]
+    ventes_jour_data = [int(r[1]) for r in ventes_jour_raw]
+
+    ca_semaine_labels = [f"Sem. {str(r[1])}" for r in ca_semaine_raw]
+    ca_semaine_data = [float(r[2]) for r in ca_semaine_raw]
+
+    ventes_article_labels = [r[0] for r in ventes_article_raw]
+    ventes_article_data = [int(r[1]) for r in ventes_article_raw]
 
     return render_template('dashboard.html',
         total_articles=total_articles,
@@ -490,8 +525,14 @@ def dashboard():
         total_quantite=total_quantite,
         chiffre_affaires=chiffre_affaires,
         stock_bas=stock_bas,
+        top_articles=top_articles,
         historique=historique,
-        top_articles=top_articles
+        ventes_jour_labels=ventes_jour_labels,
+        ventes_jour_data=ventes_jour_data,
+        ca_semaine_labels=ca_semaine_labels,
+        ca_semaine_data=ca_semaine_data,
+        ventes_article_labels=ventes_article_labels,
+        ventes_article_data=ventes_article_data
     )
 
 if __name__ == '__main__':

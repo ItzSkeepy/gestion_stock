@@ -7,6 +7,7 @@
     <a href="/export/ventes" class="btn-saahel-primary">📥 Exporter Ventes Excel</a>
 </div>
 
+<!-- Cartes statistiques -->
 <div class="row mb-4 g-3">
     <div class="col-md-3">
         <div class="card-saahel p-3 text-center" style="border-top:3px solid #29B6F6;">
@@ -38,6 +39,7 @@
     </div>
 </div>
 
+<!-- Alerte stock bas -->
 {% if stock_bas %}
 <div style="background:rgba(60,13,13,0.4);border:1px solid rgba(239,154,154,0.3);border-left:4px solid #EF9A9A;border-radius:12px;padding:15px 20px;margin-bottom:1.5rem;">
     <div style="font-weight:700;color:#EF9A9A;margin-bottom:8px;">⚠️ Stock bas — Articles à réapprovisionner</div>
@@ -51,6 +53,47 @@
 </div>
 {% endif %}
 
+<!-- GRAPHIQUES -->
+<div class="row g-4 mb-4">
+
+    <!-- Courbe ventes par jour -->
+    <div class="col-md-8">
+        <div class="card-saahel" style="border-top:3px solid #29B6F6;">
+            <div style="padding:15px 20px;border-bottom:1px solid rgba(41,182,246,0.2);">
+                <span style="font-family:'Cinzel',serif;font-size:0.9rem;letter-spacing:2px;color:#81D4FA;">📈 VENTES PAR JOUR (30 DERNIERS JOURS)</span>
+            </div>
+            <div style="padding:20px;">
+                <canvas id="chartVentesJour" height="100"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- CA par semaine -->
+    <div class="col-md-4">
+        <div class="card-saahel" style="border-top:3px solid #F0C040;">
+            <div style="padding:15px 20px;border-bottom:1px solid rgba(41,182,246,0.2);">
+                <span style="font-family:'Cinzel',serif;font-size:0.9rem;letter-spacing:2px;color:#F0C040;">💰 CA PAR SEMAINE</span>
+            </div>
+            <div style="padding:20px;">
+                <canvas id="chartCaSemaine" height="200"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Barres par article -->
+    <div class="col-12">
+        <div class="card-saahel" style="border-top:3px solid #A5D6A7;">
+            <div style="padding:15px 20px;border-bottom:1px solid rgba(41,182,246,0.2);">
+                <span style="font-family:'Cinzel',serif;font-size:0.9rem;letter-spacing:2px;color:#A5D6A7;">📦 VENTES PAR ARTICLE</span>
+            </div>
+            <div style="padding:20px;">
+                <canvas id="chartVentesArticle" height="60"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Top articles + Historique -->
 <div class="row g-4">
     {% if top_articles %}
     <div class="col-md-4">
@@ -104,4 +147,96 @@
         </div>
     </div>
 </div>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const gridColor = 'rgba(41,182,246,0.1)';
+    const textColor = '#64B0D8';
+
+    Chart.defaults.color = textColor;
+    Chart.defaults.borderColor = gridColor;
+
+    // Courbe ventes par jour
+    new Chart(document.getElementById('chartVentesJour'), {
+        type: 'line',
+        data: {
+            labels: {{ ventes_jour_labels | tojson }},
+            datasets: [{
+                label: 'Articles vendus',
+                data: {{ ventes_jour_data | tojson }},
+                borderColor: '#29B6F6',
+                backgroundColor: 'rgba(41,182,246,0.1)',
+                borderWidth: 2.5,
+                pointBackgroundColor: '#81D4FA',
+                pointRadius: 4,
+                pointHoverRadius: 7,
+                fill: true,
+                tension: 0.4
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: { legend: { display: false } },
+            scales: {
+                x: { grid: { color: gridColor }, ticks: { color: textColor, maxTicksLimit: 10 } },
+                y: { grid: { color: gridColor }, ticks: { color: textColor }, beginAtZero: true }
+            }
+        }
+    });
+
+    // CA par semaine
+    new Chart(document.getElementById('chartCaSemaine'), {
+        type: 'bar',
+        data: {
+            labels: {{ ca_semaine_labels | tojson }},
+            datasets: [{
+                label: 'CA (FCFA)',
+                data: {{ ca_semaine_data | tojson }},
+                backgroundColor: 'rgba(240,192,64,0.3)',
+                borderColor: '#F0C040',
+                borderWidth: 2,
+                borderRadius: 6
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: { legend: { display: false } },
+            scales: {
+                x: { grid: { color: gridColor }, ticks: { color: textColor } },
+                y: { grid: { color: gridColor }, ticks: { color: textColor }, beginAtZero: true }
+            }
+        }
+    });
+
+    // Barres par article
+    new Chart(document.getElementById('chartVentesArticle'), {
+        type: 'bar',
+        data: {
+            labels: {{ ventes_article_labels | tojson }},
+            datasets: [{
+                label: 'Quantité vendue',
+                data: {{ ventes_article_data | tojson }},
+                backgroundColor: [
+                    'rgba(41,182,246,0.4)','rgba(129,212,250,0.4)','rgba(21,101,192,0.4)',
+                    'rgba(25,118,210,0.4)','rgba(66,165,245,0.4)','rgba(144,202,249,0.4)',
+                    'rgba(13,71,161,0.4)','rgba(41,182,246,0.4)'
+                ],
+                borderColor: [
+                    '#29B6F6','#81D4FA','#1565C0','#1976D2','#42A5F5','#90CAF9','#0D47A1','#29B6F6'
+                ],
+                borderWidth: 2,
+                borderRadius: 8
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: { legend: { display: false } },
+            scales: {
+                x: { grid: { color: gridColor }, ticks: { color: textColor } },
+                y: { grid: { color: gridColor }, ticks: { color: textColor }, beginAtZero: true }
+            }
+        }
+    });
+</script>
 {% endblock %}
