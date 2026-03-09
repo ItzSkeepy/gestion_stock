@@ -31,7 +31,7 @@ def load_user(user_id):
     return User(user_id)
 
 ADMIN_USERNAME = 'admin'
-ADMIN_PASSWORD = generate_password_hash('saaheladmin123')
+ADMIN_PASSWORD = generate_password_hash('More@Admin2026#')
 
 # Configuration Cloudinary
 cloudinary.config(
