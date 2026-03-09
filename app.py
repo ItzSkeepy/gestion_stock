@@ -14,6 +14,13 @@ from flask import send_file
 import tempfile
 from collections import defaultdict
 from datetime import datetime, timedelta
+from reportlab.lib.pagesizes import A4
+from reportlab.platypus import SimpleDocTemplate, Image, Table, TableStyle, Paragraph, Spacer
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.lib import colors
+from reportlab.lib.units import cm
+import requests as req_http
+from PIL import Image as PILImage
 
 app = Flask(__name__)
 app.secret_key = 'ton_secret_key_ici'
@@ -123,6 +130,171 @@ def login():
 def logout():
     logout_user()
     return redirect(url_for('login'))
+    
+    # PAGE QR CODES
+@app.route('/qrcodes')
+@login_required
+def qrcodes():
+    conn = get_db()
+    cur = conn.cursor()
+    cur.execute("SELECT id, nom, qr_code, prix FROM articles WHERE qr_code IS NOT NULL ORDER BY nom")
+    articles = cur.fetchall()
+    cur.close()
+    conn.close()
+    return render_template('qrcodes.html', articles=articles)
+
+
+# TELECHARGER TOUS LES QR CODES EN PDF
+@app.route('/export/qrcodes/tous')
+@login_required
+def export_tous_qrcodes():
+    conn = get_db()
+    cur = conn.cursor()
+    cur.execute("SELECT id, nom, qr_code, prix FROM articles WHERE qr_code IS NOT NULL ORDER BY nom")
+    articles = cur.fetchall()
+    cur.close()
+    conn.close()
+
+    tmp = tempfile.NamedTemporaryFile(delete=False, suffix='.pdf')
+    tmp.close()
+
+    doc = SimpleDocTemplate(
+        tmp.name,
+        pagesize=A4,
+        rightMargin=1*cm, leftMargin=1*cm,
+        topMargin=1.5*cm, bottomMargin=1*cm
+    )
+
+    elements = []
+    styles = getSampleStyleSheet()
+
+    title_style = ParagraphStyle(
+        'Title', fontName='Helvetica-Bold', fontSize=16,
+        textColor=colors.HexColor('#0D47A1'),
+        spaceAfter=20, alignment=1
+    )
+    elements.append(Paragraph("SAAHEL — Tous les QR Codes", title_style))
+
+    for article in articles:
+        article_id, nom, qr_url, prix = article
+        elements += _build_qr_page(nom, qr_url, prix, 50)
+
+    doc.build(elements)
+
+    return send_file(
+        tmp.name, as_attachment=True,
+        download_name='saahel_tous_qrcodes.pdf',
+        mimetype='application/pdf'
+    )
+
+
+# TELECHARGER QR CODE D'UN ARTICLE EN PDF
+@app.route('/export/qrcodes/<int:id>')
+@login_required
+def export_qrcode_article(id):
+    conn = get_db()
+    cur = conn.cursor()
+    cur.execute("SELECT id, nom, qr_code, prix FROM articles WHERE id = %s", (id,))
+    article = cur.fetchone()
+    cur.close()
+    conn.close()
+
+    if not article:
+        flash("Article introuvable", "danger")
+        return redirect(url_for('qrcodes'))
+
+    article_id, nom, qr_url, prix = article
+
+    tmp = tempfile.NamedTemporaryFile(delete=False, suffix='.pdf')
+    tmp.close()
+
+    doc = SimpleDocTemplate(
+        tmp.name,
+        pagesize=A4,
+        rightMargin=1*cm, leftMargin=1*cm,
+        topMargin=1.5*cm, bottomMargin=1*cm
+    )
+
+    styles = getSampleStyleSheet()
+    title_style = ParagraphStyle(
+        'Title', fontName='Helvetica-Bold', fontSize=16,
+        textColor=colors.HexColor('#0D47A1'),
+        spaceAfter=20, alignment=1
+    )
+
+    elements = [Paragraph(f"SAAHEL — {nom}", title_style)]
+    elements += _build_qr_page(nom, qr_url, prix, 50)
+
+    doc.build(elements)
+
+    safe_nom = nom.replace(' ', '_').replace('/', '-')
+    return send_file(
+        tmp.name, as_attachment=True,
+        download_name=f'{safe_nom}_qrcodes.pdf',
+        mimetype='application/pdf'
+    )
+
+
+def _build_qr_page(nom, qr_url, prix, nb_qr):
+    """Génère une liste de 50 QR codes formatés pour un article."""
+    import urllib.request
+
+    elements = []
+
+    # Télécharger l'image QR code
+    tmp_img = tempfile.NamedTemporaryFile(delete=False, suffix='.png')
+    tmp_img.close()
+    urllib.request.urlretrieve(qr_url, tmp_img.name)
+
+    label_style = ParagraphStyle(
+        'Label', fontName='Helvetica-Bold', fontSize=7,
+        textColor=colors.HexColor('#0D47A1'),
+        alignment=1, spaceAfter=0
+    )
+    price_style = ParagraphStyle(
+        'Price', fontName='Helvetica', fontSize=6,
+        textColor=colors.HexColor('#1976D2'),
+        alignment=1
+    )
+
+    # Créer les cellules QR
+    qr_size = 3.2 * cm
+    cells = []
+    for i in range(nb_qr):
+        cell_content = [
+            Image(tmp_img.name, width=qr_size, height=qr_size),
+            Paragraph(nom, label_style),
+            Paragraph(f"{prix} FCFA", price_style),
+        ]
+        cells.append(cell_content)
+
+    # 5 colonnes, 10 lignes = 50 QR par page
+    cols = 5
+    rows_data = []
+    for i in range(0, len(cells), cols):
+        rows_data.append(cells[i:i+cols])
+        # Compléter la dernière ligne si nécessaire
+        while len(rows_data[-1]) < cols:
+            rows_data[-1].append([''])
+
+    col_width = (A4[0] - 2*cm) / cols
+
+    table = Table(rows_data, colWidths=[col_width]*cols, rowHeights=None)
+    table.setStyle(TableStyle([
+        ('ALIGN', (0,0), (-1,-1), 'CENTER'),
+        ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
+        ('TOPPADDING', (0,0), (-1,-1), 6),
+        ('BOTTOMPADDING', (0,0), (-1,-1), 6),
+        ('LEFTPADDING', (0,0), (-1,-1), 4),
+        ('RIGHTPADDING', (0,0), (-1,-1), 4),
+        ('BOX', (0,0), (-1,-1), 0.5, colors.HexColor('#B8E0F7')),
+        ('INNERGRID', (0,0), (-1,-1), 0.3, colors.HexColor('#E1F5FE')),
+        ('BACKGROUND', (0,0), (-1,-1), colors.HexColor('#F0F8FF')),
+        ('ROWBACKGROUNDS', (0,0), (-1,-1), [colors.HexColor('#F0F8FF'), colors.HexColor('#E8F4FD')]),
+    ]))
+
+    elements.append(table)
+    return elements
 
 # PAGE PRINCIPALE - Liste des articles
 @app.route('/')

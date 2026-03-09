@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2 class="page-title">🔲 QR Codes</h2>
+
+<!-- Bouton télécharger tout -->
+<div style="margin-bottom:1.5rem;display:flex;align-items:center;gap:15px;flex-wrap:wrap;">
+    <a href="/export/qrcodes/tous" class="btn-saahel-primary" style="font-size:1rem;padding:12px 30px;">
+        📥 Télécharger TOUS les QR codes (PDF)
+    </a>
+    <span style="color:#64B0D8;font-size:0.88rem;">{{ articles|length }} article(s) avec QR code</span>
+</div>
+
+<!-- Liste des articles -->
+<div class="card-saahel">
+    {% if articles %}
+    <table class="table-saahel">
+        <thead>
+            <tr>
+                <th>QR CODE</th>
+                <th>NOM DE L'ARTICLE</th>
+                <th>PRIX</th>
+                <th>TÉLÉCHARGER</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for article in articles %}
+            <tr>
+                <td>
+                    <img src="{{ article[2] }}" style="width:60px;height:60px;border-radius:8px;border:2px solid rgba(41,182,246,0.3);">
+                </td>
+                <td style="font-weight:600;color:#F0FAFF;">{{ article[1] }}</td>
+                <td style="color:#81D4FA;font-weight:700;">{{ article[3] }} FCFA</td>
+                <td>
+                    <a href="/export/qrcodes/{{ article[0] }}" class="btn-saahel-primary" style="font-size:0.82rem;padding:8px 18px;">
+                        📄 PDF — {{ article[1] }}
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <div style="padding:60px;text-align:center;color:#64B0D8;">
+        <div style="font-size:3rem;margin-bottom:10px;">🌙</div>
+        <p>Aucun article avec QR code pour le moment.</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
